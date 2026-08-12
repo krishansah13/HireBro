@@ -30,9 +30,9 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    jobType: {
+    type: {
       type: String,
-      enum: ["Part-Time", "Contractual", "Full-Time"],
+      enum: ["part-time", "contract", "full-time", "internship"],
       required: true,
     },
     isRemote: {
@@ -53,11 +53,11 @@ const jobSchema = new mongoose.Schema(
     },
     publishedAt: {
       type: Date,
-      default: Date.now(),
+      default: null,
     },
     expiresAt: {
       type: Date,
-      required: true,
+      required: true
     },
   },
   {

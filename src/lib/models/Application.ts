@@ -18,11 +18,10 @@ const applicationSchema = new Schema({
   },
   coverNote: {
     type: String,
-    required: true,
   },
   stage: {
     type: String,
-    enum: ["Applied", "Screening", "Interview", "Offer", "Rejected"],
+    enum: ["applied", "screening", "interview", "offer", "rejected"],
     required: true,
   },
   appliedAt: {
