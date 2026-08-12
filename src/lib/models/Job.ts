@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const jobSchema = new Schema(
+const jobSchema = new mongoose.Schema(
   {
     companyId: {
       type: String,
@@ -61,3 +61,7 @@ const jobSchema = new Schema(
     timestamps: true,
   },
 );
+
+const Job = mongoose.models.Job || mongoose.model("Job", jobSchema)
+
+export default Job

@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose"
+import mongoose from "mongoose";
 
-const companySchema = new Schema(
+const companySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -27,7 +27,10 @@ const companySchema = new Schema(
   },
   {
     timestamps: true,
-  }
-)
+  },
+);
 
-export default model("Company", companySchema)
+const Company =
+  mongoose.models.Company || mongoose.model("Company", companySchema);
+
+export default Company;
