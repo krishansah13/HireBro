@@ -3,11 +3,13 @@ import mongoose from "mongoose";
 const jobSchema = new mongoose.Schema(
   {
     companyId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
       required: true,
     },
     postedById: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     title: {
@@ -30,6 +32,7 @@ const jobSchema = new mongoose.Schema(
     },
     jobType: {
       type: String,
+      enum: ["Part-Time", "Contractual", "Full-Time"],
       required: true,
     },
     isRemote: {
@@ -54,7 +57,7 @@ const jobSchema = new mongoose.Schema(
     },
     expiresAt: {
       type: Date,
-      required : true,
+      required: true,
     },
   },
   {
@@ -62,6 +65,6 @@ const jobSchema = new mongoose.Schema(
   },
 );
 
-const Job = mongoose.models.Job || mongoose.model("Job", jobSchema)
+const Job = mongoose.models.Job || mongoose.model("Job", jobSchema);
 
-export default Job
+export default Job;
