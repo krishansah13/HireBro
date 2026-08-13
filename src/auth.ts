@@ -4,8 +4,10 @@ import bcrypt from "bcryptjs";
 
 import User from "./lib/models/User";
 import { connectToDatabase } from "./lib/utils/db";
+import { authConfig } from "./auth.config";
 
 export const {handlers, signIn, signOut, auth} = NextAuth ({
+    ...authConfig,
     providers : [
         Credentials({
             credentials:{
