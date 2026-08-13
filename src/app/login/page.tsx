@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -15,7 +15,7 @@ export default function Login() {
     event: FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-    console.log(email , password)
+    console.log(email, password)
     setError("");
 
     const result = await signIn("credentials", {
@@ -31,7 +31,10 @@ export default function Login() {
 
     router.push("/");
   }
-
+  const { data: session, status } = useSession();
+  if (status === "authenticated") {
+    console.log(session.user.role);
+  }
   return (
     <div>
       <form onSubmit={handleSubmit}>
