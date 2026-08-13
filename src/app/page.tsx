@@ -13,6 +13,6 @@ export default async function Home() {
     }
 
     if (session.user.role === "seeker") {
-        redirect("/seeker");
+        redirect("/dashboard");
     }
 }

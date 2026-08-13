@@ -31,10 +31,7 @@ export default function Login() {
 
     router.push("/");
   }
-  const { data: session, status } = useSession();
-  if (status === "authenticated") {
-    console.log(session.user.role);
-  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
