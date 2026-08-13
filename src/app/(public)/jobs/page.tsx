@@ -35,6 +35,7 @@ export default async function JobSearch({searchParams} : {searchParams : JobSear
         {result.jobs.map((job)=>(
                 <article key={job._id.toString()}>
                     <h2>{job.title}</h2>
+                    <h3>{job.companyId.name}</h3>
                     <p>{job.location}</p>
                     <p>{job.description}</p>
                     <hr/>
