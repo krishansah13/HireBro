@@ -1,28 +1,28 @@
-import Image from "next/image";
 import Link from "next/link";
-import Profile from "./Profile";
-import Search from "./Search";
 import Navbar from "./Navbar";
+import Profile from "./Profile";
+import { LucideBriefcaseBusiness, MailBadge } from "lucide-react";
+import SearchBar from "./Search";
 
 export default function Header() {
     return (
-            <header className="sticky top-0 z-50 w-full border-b bg-black backdrop-blur text-white">
-                <div className="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-                    {/* Logo */}
-                    <div className="flex flex-1 items-center">
-                        <Link href="/" className="text-xl font-bold tracking-tight text-white">
-                            Hire<span className="text-zinc-200">Lane</span>
-                        </Link>
-                    </div>
-
-                    {/* Navigation */}
-                    <Navbar/>
-                    <Profile />
+        <header className="bg-black text-white px-6 py-2">
+            <div className="flex gap-10 rounded-full px-6 py-2">
+                {/* logo */}
+                <div className="w-1/3 flex gap-3 text-xl font-extrabold uppercase">
+                    <span className="text-xl font-extrabold uppercase">
+                        HireLane
+                    </span>
+                    <LucideBriefcaseBusiness />
                 </div>
-            <h1>
-                Find Your Dream Job Here
-            </h1>
-            <Search />
+                <Navbar />
+                <Profile />
+            </div>
+            <div className="flex gap-3 justify-center m-5 font-extrabold text-2xl">
+                FIND YOUR DREAM JOB
+                <MailBadge className="h-8 text-2xl font-extrabold"/>
+            </div>
+            <SearchBar />
         </header>
     )
 }
