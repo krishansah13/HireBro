@@ -41,24 +41,61 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
                         </span>
                     </header>
 
-                    <div id="jobType" className=" p-3 rounded-xl bg-white">
+                    <div id="jobType" className="p-3 rounded-xl">
                         <p className="font-bold text-xl">
                             Job Types
                         </p>
-                        <div className="rounded-xl px-3">
+                        <div className="rounded-xl px-3 flex flex-col gap-2 mt-2">
                             <p>
                                 <input type="checkbox" name="fullTime" id="fullTime" /> <span> Full Time </span>
                             </p>
                             <p>
-                                <input type="checkbox" name="partTime" id="fullTime" /> <span> Part Time </span>
+                                <input type="checkbox" name="partTime" id="partTime" /> <span> Part Time </span>
                             </p>
                             <p>
-                                <input type="checkbox" name="internship" id="fullTime" /> <span> Internship </span>
+                                <input type="checkbox" name="internship" id="internship" /> <span> Internship </span>
                             </p>
                             <p>
-                                <input type="checkbox" name="contractual" id="fullTime" /> <span> Contractual</span>
+                                <input type="checkbox" name="contractual" id="contractual" /> <span> Contractual</span>
                             </p>
                         </div>
+                    </div>
+
+                    <div id="location" className="p-3 rounded-xl">
+                        <h1 className="text-xl font-bold">
+                            Location
+                        </h1>
+                        <div className="rounded-xl px-3 flex flex-col gap-2 mt-2">
+                            <p>
+                                <input type="checkbox" name="fullTime" id="fullTime" /> <span> Bengaluru</span>
+                            </p>
+                            <p>
+                                <input type="checkbox" name="partTime" id="partTime" /> <span> Hyderabad </span>
+                            </p>
+                            <p>
+                                <input type="checkbox" name="internship" id="internship" /> <span> Gurugram </span>
+                            </p>
+                            <p>
+                                <input type="checkbox" name="contractual" id="contractual" /> <span> Mumbai </span>
+                            </p>
+                            <p>
+                                <input type="checkbox" name="contractual" id="contractual" /> <span> Pune </span>
+                            </p>
+                            <p>
+                                <input type="checkbox" name="remote" id="remote" />
+                                <span> Remote,  India </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="sort" className="px-3 rounded-xl flex gap-3 border py-1 justify-around">
+                        <h1>
+                            Sort By: 
+                        </h1>
+                            <select name="option" id="option" className="border rounded-xl px-2 py-1 bg-gray-600 text-white">
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
                     </div>
                 </aside>
                 <div className="px-2 py-2 border-2 border-white rounded-2xl w-5/6">
@@ -67,6 +104,7 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
                             <h2>{job.title}</h2>
                             <h3>{job.companyId.name}</h3>
                             <p>{job.location}</p>
+                            <p>{job.salaryMin}</p>
                             <p>{job.description}</p>
                             <hr />
                         </article>
