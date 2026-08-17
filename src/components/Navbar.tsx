@@ -1,39 +1,22 @@
-import { Briefcase, User, Bell } from "lucide-react";
-import SearchBar from "./SearchForm";
-
+import Image from "next/image";
 export default function Navbar() {
     return (
-        <nav className="flex items-center justify-between px-8 py-4">
-            {/* Logo */}
+        <nav className="flex items-center justify-between px-8 py-4 bg-white shadow-sm">
             <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-black text-white">
-                    <Briefcase size={20} />
-                </div>
-
-                <h1 className="text-xl font-semibold tracking-tight">
-                    Hire<span className="text-gray-400">Lane</span>
+                    <Image src="/images/hirelane_brand_mark.png" alt="HireLane" width={30} height={30} />
+                <h1 className="text-xl font-semibold tracking-tight text-[#2E46BA]">
+                    Hirelane
                 </h1>
             </div>
 
-
-            {/* Actions */}
             <div className="flex items-center gap-3">
-                <button className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-gray-100 transition hover:text-black">
-                    <Bell size={19} />
-                </button>
+                <div className="text-sm font-medium text-gray-950  active:underline">Find Jobs</div>
+                <div className="text-sm font-medium text-gray-950  active:underline">Companies</div>
+                <div className="text-sm font-medium text-gray-950  active:underline">Post a Job</div>
+            </div>
 
-                <div className="h-7 w-px bg-gray-200" />
-
-                <button className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-100 transition hover:text-black">
-                    <div className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-200 text-black">
-                        <User size={18} />
-                    </div>
-
-                    <div className="hidden md:block text-left">
-                        <p className="text-sm font-medium">Profile</p>
-                        <p className="text-xs text-gray-400">My account</p>
-                    </div>
-                </button>
+            <div className="flex items-center gap-3">
+                <button className="bg-[#2E46BA] text-white px-6 py-2 rounded-md border border-[#2E46BA]">Signin</button>
             </div>
         </nav>
     );
