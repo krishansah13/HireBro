@@ -1,10 +1,4 @@
-import Link from "next/link";
-import {
-    SlidersHorizontal,
-    X,
-    ChevronLeft,
-    ChevronRight,
-} from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 
 import { getJobs } from "@/lib/job-query";
 import { jobQuerySchema } from "@/lib/validation";
@@ -22,11 +16,11 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
     const parsed = jobQuerySchema.parse(params);
 
     const remote =
-    parsed.remote === "true"
-      ? true
-      : parsed.remote === "false"
-        ? false
-        : undefined;
+        parsed.remote === "true"
+            ? true
+            : parsed.remote === "false"
+                ? false
+                : undefined;
 
 
     const result = await getJobs({
@@ -52,27 +46,28 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
     };
 
     return (
-        <main className="min-h-screen m-6 rounded-2xl bg-gray-100 shadow-2xs">
-            <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+        <main className="min-h-screen bg-linear-100 from-white via-white to-indigo-400 shadow-2xl">
+            <div className="px-6 py-10 lg:px-8">
+                <div>
+                    <section className="w-full text-center">
+                        <p className="text-sm font-medium text-gray-400">
+                            HIRELANE JOBS
+                        </p>
 
-                <section className="mx-auto max-w-3xl text-center">
-                    <p className="text-sm font-medium text-gray-400">
-                        HIRELANE JOBS
-                    </p>
+                        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
+                            Find work that fits you.
+                        </h1>
 
-                    <h1 className="mt-3 text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
-                        Find work that fits you.
-                    </h1>
+                        <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">
+                            Discover opportunities from companies looking
+                            for people like you.
+                        </p>
+                    </section>
 
-                    <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">
-                        Discover opportunities from companies looking
-                        for people like you.
-                    </p>
-                </section>
-
-                <section className="mx-auto mt-10 max-w-5xl">
-                    <SearchForm params={currentParams} />
-                </section>
+                    <section className="mx-auto mt-10 max-w-5xl">
+                        <SearchForm params={currentParams} />
+                    </section>
+                </div>
 
                 <section className="mt-12">
                     <div className="mb-6 flex items-end justify-between">
@@ -107,7 +102,7 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
                                     {result.jobs.map((job: Job) => (
                                         <JobCard key={job._id.toString()} job={job} />
                                     ))}
-                                </div>  
+                                </div>
                             )}
 
                             {result.jobs.length > 0 && (

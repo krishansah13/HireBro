@@ -1,32 +1,81 @@
 import { JobSearchProps } from "@/types/JobTypes";
+import { Search, MapPin, ArrowRight } from "lucide-react";
 
-export default function SearchForm({params}: {params: JobSearchProps;}) {
+export default function SearchForm({
+    params,
+}: {
+    params: JobSearchProps;
+}) {
     return (
-        <form action="/jobs" method="GET" className="flex flex-col gap-3 sm:flex-row">
-            <div className="relative flex-1">
-                <input name="q" type="search" placeholder="Search jobs, skills, or keywords..." defaultValue={params.q} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-black"/>
-            </div>
+        <form
+            action="/jobs"
+            method="GET"
+            className="flex h-[70px] w-full items-center rounded-2xl bg-[#fbf9ff] px-3 shadow-[0_4px_12px_rgba(0,0,0,0.10)]"
+        >
+            {/* Job search */}
+            <div className="flex h-full flex-1 items-center">
+                <Search
+                    size={16}
+                    strokeWidth={2.2}
+                    className="ml-5 mr-5 shrink-0 text-[#484855]"
+                />
 
-            <div className="relative sm:w-56">
-                <input name="location" type="text" placeholder="Location" defaultValue={params.location} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-black"
+                <input
+                    name="q"
+                    type="search"
+                    defaultValue={params.q}
+                    placeholder="Job title, keywords, or company"
+                    className="h-full w-full bg-transparent text-[16px] font-normal outline-none placeholder:text-[#a5a4ae]"
                 />
             </div>
 
-            {/* Preserve existing filters */}
+            {/* Divider */}
+            <div className="h-[38px] w-px bg-[#c9c6d1]" />
+
+            {/* Location */}
+            <div className="flex h-full flex-1 items-center">
+                <MapPin
+                    size={16}
+                    strokeWidth={2.2}
+                    className="ml-8 mr-5 shrink-0 text-[#484855]"
+                />
+
+                <input
+                    name="location"
+                    type="text"
+                    defaultValue={params.location}
+                    placeholder="City, state, or country"
+                    className="h-full w-full bg-transparent text-[16px] outline-none placeholder:text-[#a5a4ae]"
+                />
+            </div>
+
             {params.type && (
                 <input type="hidden" name="type" value={params.type} />
             )}
 
             {params.remote && (
-                <input type="hidden" name="remote" value={params.remote}/>
+                <input
+                    type="hidden"
+                    name="remote"
+                    value={params.remote}
+                />
             )}
 
             {params.sort && (
-                <input type="hidden" name="sort" value={params.sort}/>
+                <input
+                    type="hidden"
+                    name="sort"
+                    value={params.sort}
+                />
             )}
 
-            <button type="submit" className="h-12 rounded-xl bg-linear-130 from-zinc-900  to-zinc-700 px-7 text-sm font-medium text-white transition hover:scale-105 cursor-pointer h">
+            {/* Button */}
+            <button
+                type="submit"
+                className="flex h-12 w-32 shrink-0 items-center justify-center gap-4 rounded-[14px] bg-[#1739ad] text-[16px] font-semibold text-white transition hover:bg-[#12329c]"
+            >
                 Search
+                <ArrowRight size={22} />
             </button>
         </form>
     );

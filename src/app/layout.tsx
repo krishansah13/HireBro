@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hanken_Grotesk } from 'next/font/google';
 import './globals.css';
 import Provider from "@/Providers";
+import Navbar from "@/components/Navbar";
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ['latin'],
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${hankenGrotesk.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Provider>
+          <Navbar />
           {children}
         </Provider>
       </body>
