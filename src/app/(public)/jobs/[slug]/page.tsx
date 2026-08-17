@@ -27,7 +27,7 @@ export default async function JobDetail({
             <div className="overflow-hidden bg-gray-50 shadow-sm">
 
                 {/* Header */}
-                <section className="relative overflow-hidden bg-linear-100 from-white via-white to-indigo-400">
+                <section className="relative overflow-hidden bg-linear-150 from-white via-white to-indigo-400">
                     <div className="relative px-6 py-12 sm:px-10 lg:py-16">
                         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
                             <div className="">
@@ -90,30 +90,30 @@ export default async function JobDetail({
                 </section>
 
                 {/* Content */}
-                <section className="mx-auto grid max-w-6xl gap-8 px-6 py-10 sm:px-10 lg:grid-cols-[1fr_320px] lg:py-14">
+                {/* Content */}
+                <section className="mx-auto grid gap-8 px-6 py-10 sm:px-10 lg:grid-cols-[1fr_320px] lg:py-14">
 
-                    {/* Main content */}
-                    <article className="rounded-2xl  bg-white p-6 shadow-sm sm:p-8">
+                    {/* Left: About */}
+                    <article className="rounded-2xl bg-white p-6 shadow-sm sm:p-8">
+                        <h2 className="text-xl font-bold text-gray-950">
+                            About the role
+                        </h2>
 
-                        <div>
-                            <h2 className="text-xl font-bold text-gray-950">
-                                About the role
-                            </h2>
-
-                            <div className="mt-5 whitespace-pre-line text-[15px] leading-7 text-gray-600">
-                                {job.description}
-                            </div>
+                        <div className="mt-5 whitespace-pre-line text-[15px] leading-7 text-gray-600">
+                            {job.description}
                         </div>
+                    </article>
 
-                        {/* Divider */}
-                        <div className="my-10 h-px bg-gray-100" />
+                    {/* Right column */}
+                    <div className="flex flex-col gap-8">
 
-                        <div>
+                        {/* Job Details - TOP RIGHT */}
+                        <section className="rounded-2xl bg-white p-6 shadow-sm sm:p-8">
                             <h2 className="text-xl font-bold text-gray-950">
                                 Job details
                             </h2>
 
-                            <dl className="mt-6 grid gap-5 sm:grid-cols-2">
+                            <dl className="mt-6 grid gap-4">
                                 <div className="rounded-xl bg-gray-50 p-4">
                                     <dt className="text-xs font-medium uppercase tracking-wide text-gray-400">
                                         Location
@@ -150,73 +150,87 @@ export default async function JobDetail({
                                     </dd>
                                 </div>
                             </dl>
-                        </div>
-                    </article>
+                        </section>
 
-                    {/* Sidebar */}
-                    <aside className="lg:sticky lg:top-6 lg:h-fit">
-                        <div className="rounded-2xl  bg-white p-6 shadow-sm">
+                        {/* Existing Sidebar - BELOW Job Details */}
+                        <aside>
+                            <div className="rounded-2xl bg-white p-6 shadow-sm">
 
-                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-950 text-lg font-bold text-white">
-                                {company?.name?.charAt(0).toUpperCase() ?? "H"}
+                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-950 text-lg font-bold text-white">
+                                    {company?.name?.charAt(0).toUpperCase() ?? "H"}
+                                </div>
+
+                                <h3 className="mt-5 text-lg font-bold text-gray-950">
+                                    {company?.name || "Company"}
+                                </h3>
+
+                                <p className="mt-1 text-sm text-gray-500">
+                                    {job.location}
+                                </p>
+
+                                <div className="my-6 h-px bg-gray-100" />
+
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-500">
+                                            Employment
+                                        </span>
+                                        <span className="font-medium text-gray-900">
+                                            {jobType}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-500">
+                                            Location
+                                        </span>
+                                        <span className="max-w-[160px] text-right font-medium text-gray-900">
+                                            {job.location}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-500">
+                                            Workplace
+                                        </span>
+                                        <span className="font-medium text-gray-900">
+                                            {job.remote ? "Remote" : "On-site"}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-start justify-between gap-4 text-sm">
+                                        <span className="text-gray-500">
+                                            Salary
+                                        </span>
+
+                                        <span className="text-right font-medium text-gray-900">
+                                            {job.salaryMin?.toLocaleString("en-US", {
+                                                style: "currency",
+                                                currency: "USD",
+                                            })}{" "}
+                                            -{" "}
+                                            {job.salaryMax?.toLocaleString("en-US", {
+                                                style: "currency",
+                                                currency: "USD",
+                                            })}
+                                            <span className="block">
+                                                per year
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <button className="mt-7 w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:cursor-pointer hover:bg-gray-800">
+                                    Apply for this job
+                                </button>
+
+                                <p className="mt-4 text-center text-xs leading-5 text-gray-400">
+                                    Apply through Hirelane and take the next step
+                                    in your career.
+                                </p>
                             </div>
-
-                            <h3 className="mt-5 text-lg font-bold text-gray-950">
-                                {company?.name || "Company"}
-                            </h3>
-
-                            <p className="mt-1 text-sm text-gray-500">
-                                {job.location}
-                            </p>
-                            <div className="my-6 h-px bg-gray-100" />
-
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-gray-500">
-                                        Employment
-                                    </span>
-                                    <span className="font-medium text-gray-900">
-                                        {jobType}
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-gray-500">
-                                        Location
-                                    </span>
-                                    <span className="max-w-[160px] text-right font-medium text-gray-900">
-                                        {job.location}
-                                    </span>
-                                </div>
-
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-gray-500">
-                                        Workplace
-                                    </span>
-                                    <span className="font-medium text-gray-900">
-                                        {job.remote ? "Remote" : "On-site"}
-                                    </span>
-                                </div>
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-gray-500">
-                                        Salary Structure
-                                    </span>
-                                    <span className="font-medium text-gray-900">
-                                        {job.salaryMin?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} - {job.salaryMax?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} per year
-                                    </span>
-                                </div>
-                            </div>
-
-                            <button className="mt-7 w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-800 hover:cursor-pointer">
-                                Apply for this job
-                            </button>
-
-                            <p className="mt-4 text-center text-xs leading-5 text-gray-400">
-                                Apply through Hirelane and take the next step
-                                in your career.
-                            </p>
-                        </div>
-                    </aside>
+                        </aside>
+                    </div>
                 </section>
 
                 {/* Mobile CTA */}
