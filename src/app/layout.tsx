@@ -3,6 +3,7 @@ import { Hanken_Grotesk } from 'next/font/google';
 import './globals.css';
 import Provider from "@/Providers";
 import Navbar from "@/components/Navbar";
+import FooterSection from "@/components/FooterSection";
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ['latin'],
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Provider>
           <Navbar />
           {children}
+          <FooterSection />
         </Provider>
       </body>
     </html>

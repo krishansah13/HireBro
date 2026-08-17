@@ -52,7 +52,6 @@ export default async function JobSearch({
                 <Pagination page={currentPage} totalPages={totalPages} params={currentParams} />
             )}
             </div>
-            <FooterSection />
         </main>
     );
 }

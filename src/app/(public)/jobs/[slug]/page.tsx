@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getJobBySlug } from "@/lib/job-query";
+import { ArrowUpRight } from "lucide-react";
 
 export default async function JobDetail({
     params,
@@ -22,24 +23,19 @@ export default async function JobDetail({
         job.type.charAt(0).toUpperCase() + job.type.slice(1);
 
     return (
-        <main className="min-h-screen bg-white px-4 py-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-gray-50 shadow-sm">
+        <main className="min-h-screen bg-white">
+            <div className="overflow-hidden bg-gray-50 shadow-sm">
 
                 {/* Header */}
-                <section className="relative overflow-hidden bg-white">
-                    {/* Decorative background */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(3, 3, 40, 0.1),transparent_35%)]" />
-
-                    <div className="relative mx-auto max-w-6xl px-6 py-12 sm:px-10 lg:py-16">
+                <section className="relative overflow-hidden bg-linear-100 from-white via-white to-indigo-400">
+                    <div className="relative px-6 py-12 sm:px-10 lg:py-16">
                         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-
-                            <div className="max-w-3xl">
+                            <div className="">
                                 {/* Brand */}
                                 <div className="mb-6 flex items-center gap-3">
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900 text-sm font-bold text-white">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#2e46ba] text-sm font-extrabold text-white">
                                         {company?.name?.charAt(0).toUpperCase() ?? "H"}
                                     </div>
-
                                     <div>
                                         <p className="text-sm font-semibold text-gray-900">
                                             {company?.name || "Company"}
@@ -50,7 +46,7 @@ export default async function JobDetail({
                                     </div>
                                 </div>
 
-                                <h1 className="text-4xl font-bold tracking-tight text-gray-950 sm:text-5xl">
+                                <h1 className="text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
                                     {job.title}
                                 </h1>
 
@@ -83,8 +79,10 @@ export default async function JobDetail({
 
                             {/* Apply button - desktop */}
                             <div className="hidden sm:block">
-                                <button className="rounded-xl bg-gray-950 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/10 transition hover:bg-gray-800 hover:cursor-pointer">
-                                    Apply for this job
+                                <button className="rounded-xl bg-[#2e46ba] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/10 transition hover:bg-gray-800 hover:cursor-pointer">
+                                    <p className="flex items-center gap-2">
+                                        Apply for this job <ArrowUpRight size={16} />
+                                    </p>
                                 </button>
                             </div>
                         </div>
