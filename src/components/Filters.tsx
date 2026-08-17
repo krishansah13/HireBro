@@ -86,7 +86,7 @@ export default function Filters({
     }
 
     return (
-        <aside className="h-fit rounded-2xl border border-gray-200 bg-white p-5">
+        <aside className="h-fit rounded-2xl bg-linear-130  from-zinc-900  to-zinc-700 text-white p-5">
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -100,7 +100,7 @@ export default function Filters({
                 <button
                     type="button"
                     onClick={handleClear}
-                    className="text-xs text-gray-400 hover:text-black"
+                    className="text-xs text-gray-300 hover:text-black"
                 >
                     Clear
                 </button>
@@ -125,7 +125,7 @@ export default function Filters({
                         ].map(([value, label]) => (
                             <label
                                 key={value}
-                                className="flex cursor-pointer items-center gap-3 text-sm text-gray-600"
+                                className="flex cursor-pointer items-center gap-3 text-sm text-gray-300"
                             >
                                 <input
                                     type="radio"
@@ -152,7 +152,7 @@ export default function Filters({
 
                     <div className="space-y-3">
                         {/* Any */}
-                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-600">
+                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-300">
                             <input
                                 type="radio"
                                 name="remote"
@@ -168,7 +168,7 @@ export default function Filters({
                         </label>
 
                         {/* Remote */}
-                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-600">
+                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-300">
                             <input
                                 type="radio"
                                 name="remote"
@@ -184,7 +184,7 @@ export default function Filters({
                         </label>
 
                         {/* On-site */}
-                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-600">
+                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-300">
                             <input
                                 type="radio"
                                 name="remote"
@@ -212,7 +212,7 @@ export default function Filters({
                         onChange={(e) =>
                             setSort(e.target.value)
                         }
-                        className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none focus:border-black"
+                        className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none focus:border-black text-black"
                     >
                         <option value="newest">
                             Newest
@@ -227,7 +227,7 @@ export default function Filters({
                 {/* Apply */}
                 <button
                     type="submit"
-                    className="h-11 w-full rounded-xl bg-black text-sm font-medium text-white transition hover:bg-gray-800"
+                    className="h-11 w-full rounded-xl bg-black text-sm font-medium text-white transition hover:bg-zinc-600 hover:scale-105"
                 >
                     Apply filters
                 </button>
