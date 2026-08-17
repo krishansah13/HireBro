@@ -15,11 +15,9 @@ export default function JobSection({
     result: JobSearchResult;
     currentParams: JobSearchProps;
 }) {
-    const currentPage = result.page ?? 1;
-    const totalPages = Math.ceil(result.total / 10);
 
     return (
-        <section className="min-h-[500px] bg-white p-7 shadow-2xl">
+        <section className="min-h-[500px] bg-white p-7 ">
             <div className="mb-6 flex items-end justify-between">
 
                 <div className="flex items-center gap-2 text-sm text-gray-400 lg:hidden">
@@ -50,7 +48,7 @@ export default function JobSection({
                                 </p>
                             </div>
 
-                            <div className="grid gap-5 md:grid-cols-2">
+                            <div className="flex flex-col gap-5 md:grid-cols-2">
                                 {result.jobs.map((job: Job) => (
                                     <JobCard key={job._id.toString()} job={job} />
                                 ))}
@@ -58,9 +56,6 @@ export default function JobSection({
                         </div>
                     )}
 
-                    {result.jobs.length > 0 && totalPages > 1 && (
-                        <Pagination page={currentPage} totalPages={totalPages} params={currentParams} />
-                    )}
                 </div>
             </div>
         </section>

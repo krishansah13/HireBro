@@ -3,6 +3,8 @@ import { jobQuerySchema } from "@/lib/validation";
 import { JobSearchProps } from "@/types/JobTypes";
 import HeroSection from "@/components/HeroSection";
 import JobSection from "@/components/JobSection";
+import Pagination from "@/components/Pagination";
+import FooterSection from "@/components/FooterSection";
 
 export default async function JobSearch({
     searchParams,
@@ -17,8 +19,8 @@ export default async function JobSearch({
         parsed.remote === "true"
             ? true
             : parsed.remote === "false"
-              ? false
-              : undefined;
+                ? false
+                : undefined;
 
     const result = await getJobs({
         q: parsed.q,
@@ -30,6 +32,9 @@ export default async function JobSearch({
         limit: 10,
     });
 
+    const currentPage = result.page ?? 1;
+    const totalPages = Math.ceil(result.total / 10);
+
     const currentParams: JobSearchProps = {
         q: parsed.q,
         location: parsed.location,
@@ -39,10 +44,13 @@ export default async function JobSearch({
     };
 
     return (
-        <main>
+        <main className="">
             <HeroSection params={currentParams} />
-
-            <JobSection result={result} currentParams={currentParams}/>
+            <JobSection result={result} currentParams={currentParams} />
+            {result.jobs.length > 0 && totalPages > 1 && (
+                <Pagination page={currentPage} totalPages={totalPages} params={currentParams} />
+            )}
+            <FooterSection />
         </main>
     );
 }

@@ -1,7 +1,6 @@
 import { Job } from "@/types/JobTypes";
-import { Briefcase } from "lucide-react";
+import { Briefcase, MapPin, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-
 
 function formatDate(date?: string | Date) {
     if (!date) return "";
@@ -34,80 +33,212 @@ function formatDate(date?: string | Date) {
     });
 }
 
-
-export default function JobCard({
-    job,
-}: {
-    job: Job;
-}) {
+export default function JobCard({ job }: { job: Job }) {
     return (
         <Link href={`/jobs/${job.slug}`} className="group block">
-            <article className="flex min-h-80 flex-col rounded-2xl bg-linear-130 from-zinc-900  to-zinc-700 to p-6 transition duration-200 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg text-white">
-                {/* Company */}
-                <div className="flex items-start justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-gray-100 text-lg font-semibold text-gray-700">
-                        {job.companyId.logo ? (
-                            <img
-                                src={job.companyId.logo}
-                                alt={job.companyId.name}
-                                className="h-full w-full object-cover"
-                            />
-                        ) : (
-                            job.companyId.name
-                                .charAt(0)
-                                .toUpperCase()
-                        )}
-                    </div>
-
-                    {job.createdAt && (
-                        <span className="text-xs text-gray-300">
-                            {formatDate(job.createdAt)}
-                        </span>
+            <article
+                className="
+                    shadow-xs
+                    flex
+                    min-h-[116px]
+                    items-center
+                    gap-5
+                    rounded-xl
+                    bg-white
+                    px-6
+                    py-5
+                    transform-gpu
+                    transition-all
+                    duration-200
+                    ease-out
+                    hover:-translate-y-1
+                    hover:shadow-[0_10px_30px_rgba(76,61,130,0.10)]
+                "
+            >
+                {/* Company logo */}
+                <div
+                    className="
+                        flex
+                        h-12
+                        w-12
+                        shrink-0
+                        items-center
+                        justify-center
+                        overflow-hidden
+                        rounded-xl
+                        bg-white
+                        text-sm
+                        font-semibold
+                        text-gray-600
+                        shadow-[0_1px_4px_rgba(0,0,0,0.04)]
+                        ring-1
+                        ring-gray-100
+                    "
+                >
+                    {job.companyId.logo ? (
+                        <img
+                            src={job.companyId.logo}
+                            alt={job.companyId.name}
+                            className="h-full w-full object-contain p-2"
+                        />
+                    ) : (
+                        job.companyId.name.charAt(0).toUpperCase()
                     )}
                 </div>
 
                 {/* Main content */}
-                <div className="mt-6 flex-1">
-                    <h2 className="line-clamp-2 text-xl font-semibold tracking-tight text-gray-100 transition group-hover:text-gray-300">
-                        {job.title}
-                    </h2>
+                <div className="min-w-0 flex-1">
+                    {/* Title */}
+                    <div className="flex items-center gap-2">
+                        <h2
+                            className="
+                                truncate
+                                text-[15px]
+                                font-semibold
+                                tracking-[-0.01em]
+                                text-[#17151c]
+                            "
+                        >
+                            {job.title}
+                        </h2>
 
-                    <p className="mt-2 text-sm font-medium text-gray-300">
-                        {job.companyId.name}
-                    </p>
+                        {job.createdAt &&
+                            new Date().getTime() -
+                                new Date(job.createdAt).getTime() <
+                                7 * 24 * 60 * 60 * 1000 && (
+                                <span
+                                    className="
+                                        shrink-0
+                                        rounded-full
+                                        bg-[#e9e9ff]
+                                        px-2
+                                        py-0.5
+                                        text-[10px]
+                                        font-medium
+                                        text-[#4f46b5]
+                                    "
+                                >
+                                    New
+                                </span>
+                            )}
+                    </div>
 
-                    <div className="mt-5 flex flex-wrap gap-2">
-                        <span className="flex items-center gap-1.5 rounded-lg bg-gray-50 px-2.5 py-1.5 text-xs text-gray-600">
+                    {/* Company + location + type */}
+                    <div
+                        className="
+                            mt-1.5
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-x-2
+                            gap-y-1
+                            text-[12px]
+                            text-gray-500
+                        "
+                    >
+                        <span className="font-medium text-gray-700">
+                            {job.companyId.name}
+                        </span>
+
+                        <span className="text-gray-300">•</span>
+
+                        <span className="flex items-center gap-1">
+                            <MapPin size={11} />
                             {job.location}
                         </span>
 
                         {job.type && (
-                            <span className="flex items-center gap-1.5 rounded-lg bg-gray-50 px-2.5 py-1.5 text-xs capitalize text-gray-600">
-                                <Briefcase size={13} />
+                            <>
+                                <span className="text-gray-300">•</span>
+
+                                <span className="flex items-center gap-1">
+                                    <Briefcase size={11} />
+                                    <span className="capitalize">
+                                        {job.type}
+                                    </span>
+                                </span>
+                            </>
+                        )}
+
+                        {job.remote && (
+                            <>
+                                <span className="text-gray-300">•</span>
+                                <span>Remote</span>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Tags */}
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                        {job.type && (
+                            <span
+                                className="
+                                    rounded-md
+                                    bg-[#f1eff7]
+                                    px-2
+                                    py-1
+                                    text-[10px]
+                                    font-medium
+                                    text-gray-600
+                                "
+                            >
                                 {job.type}
                             </span>
                         )}
 
                         {job.remote && (
-                            <span className="rounded-lg bg-green-50 px-2.5 py-1.5 text-xs font-medium text-green-700">
+                            <span
+                                className="
+                                    rounded-md
+                                    bg-[#f1eff7]
+                                    px-2
+                                    py-1
+                                    text-[10px]
+                                    font-medium
+                                    text-gray-600
+                                "
+                            >
                                 Remote
                             </span>
                         )}
                     </div>
-
-                    <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-300">
-                        {job.description}
-                    </p>
                 </div>
 
-                {/* Footer */}
-                <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4">
-                    <span className="text-xs text-gray-200">
-                        View details
-                    </span>
+                {/* Right side */}
+                <div className="flex shrink-0 items-center gap-5">
+                    {job.createdAt && (
+                        <span className="hidden text-[11px] text-gray-400 lg:block">
+                            {formatDate(job.createdAt)}
+                        </span>
+                    )}
 
-                    <span className="text-sm font-medium transition group-hover:translate-x-1">
-                        →
+                    <span
+                        className="
+                            flex
+                            h-9
+                            items-center
+                            gap-1.5
+                            rounded-md
+                            bg-white
+                            px-4
+                            text-[11px]
+                            font-medium
+                            text-[#4338a8]
+                            transition-colors
+                            group-hover:bg-[#faf9ff]
+                        "
+                    >
+                        View Role
+
+                        <ArrowUpRight
+                            size={13}
+                            className="
+                                transition-transform
+                                duration-200
+                                group-hover:-translate-y-0.5
+                                group-hover:translate-x-0.5
+                            "
+                        />
                     </span>
                 </div>
             </article>

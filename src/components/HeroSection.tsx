@@ -3,7 +3,7 @@ import SearchForm from "./SearchForm";
 
 export default function HeroSection({params}: {params: JobSearchProps}) {
     return (
-        <div className="p-7 h-100 bg-linear-100 from-white via-white to-indigo-400 shadow-2xl">
+        <div className="p-7 h-100 bg-linear-100 from-white via-white to-indigo-400 ">
             <section className="w-full text-center">
                 <p className="text-sm font-medium text-gray-400">
                     HIRELANE JOBS
