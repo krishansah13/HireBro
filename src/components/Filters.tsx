@@ -86,7 +86,7 @@ export default function Filters({
     }
 
     return (
-        <aside className="h-fit rounded-2xl bg-linear-130  from-zinc-900  to-zinc-700 text-white p-5">
+        <aside className="h-fit rounded-2xl p-5">
             {/* Header */}
             <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -100,11 +100,12 @@ export default function Filters({
                 <button
                     type="button"
                     onClick={handleClear}
-                    className="text-xs text-gray-300 hover:cursor-pointer"
+                    className="text-xs text-gray-900 hover:cursor-pointer"
                 >
                     Clear
                 </button>
             </div>
+            <hr className=" my-5 -mt-3" />
 
             <form
                 onSubmit={handleSubmit}
@@ -123,10 +124,7 @@ export default function Filters({
                             ["contract", "Contract"],
                             ["internship", "Internship"],
                         ].map(([value, label]) => (
-                            <label
-                                key={value}
-                                className="flex cursor-pointer items-center gap-3 text-sm text-gray-300"
-                            >
+                            <label key={value} className="flex cursor-pointer items-center gap-3 text-sm text-gray-900">
                                 <input
                                     type="radio"
                                     name="type"
@@ -135,7 +133,7 @@ export default function Filters({
                                     onChange={(e) =>
                                         setType(e.target.value)
                                     }
-                                    className="h-4 w-4 accent-black"
+                                    className="h-4 w-4 accent-blue"
                                 />
 
                                 {label}
@@ -152,7 +150,7 @@ export default function Filters({
 
                     <div className="space-y-3">
                         {/* Any */}
-                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-300">
+                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-900">
                             <input
                                 type="radio"
                                 name="remote"
@@ -161,14 +159,14 @@ export default function Filters({
                                 onChange={() =>
                                     setRemote("any")
                                 }
-                                className="h-4 w-4 accent-black"
+                                className="h-4 w-4 accent-blue"
                             />
 
                             Any
                         </label>
 
                         {/* Remote */}
-                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-300">
+                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-900">
                             <input
                                 type="radio"
                                 name="remote"
@@ -177,14 +175,14 @@ export default function Filters({
                                 onChange={() =>
                                     setRemote("true")
                                 }
-                                className="h-4 w-4 accent-black"
+                                className="h-4 w-4 accent-blue"
                             />
 
                             Remote
                         </label>
 
                         {/* On-site */}
-                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-300">
+                        <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-900">
                             <input
                                 type="radio"
                                 name="remote"
@@ -193,7 +191,7 @@ export default function Filters({
                                 onChange={() =>
                                     setRemote("false")
                                 }
-                                className="h-4 w-4 accent-black"
+                                className="h-4 w-4 accent-blue"
                             />
 
                             On-site
@@ -227,7 +225,7 @@ export default function Filters({
                 {/* Apply */}
                 <button
                     type="submit"
-                    className="h-11 w-full rounded-xl bg-black text-sm font-medium text-white transition hover:bg-zinc-600 hover:scale-105"
+                    className="h-11 w-full rounded-xl bg-[#2E46BA] text-sm font-medium text-white transition hover:bg-[#2E46BA]/80 hover:scale-105"
                 >
                     Apply filters
                 </button>

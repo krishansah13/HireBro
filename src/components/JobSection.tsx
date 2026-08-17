@@ -19,20 +19,8 @@ export default function JobSection({
     const totalPages = Math.ceil(result.total / 10);
 
     return (
-        <section className="min-h-[500px] bg-linear-100 from-white via-white to-indigo-400 p-7 shadow-2xl">
+        <section className="min-h-[500px] bg-white p-7 shadow-2xl">
             <div className="mb-6 flex items-end justify-between">
-                <div>
-                    <h2 className="text-xl font-semibold tracking-tight text-gray-900">
-                        Latest jobs
-                    </h2>
-
-                    <p className="mt-1 text-sm text-gray-950">
-                        {result.total.toLocaleString()}{" "}
-                        {result.total === 1
-                            ? "opportunity"
-                            : "opportunities"}
-                    </p>
-                </div>
 
                 <div className="flex items-center gap-2 text-sm text-gray-400 lg:hidden">
                     <SlidersHorizontal size={16} />
@@ -51,22 +39,27 @@ export default function JobSection({
                     {result.jobs.length === 0 ? (
                         <EmptyState />
                     ) : (
-                        <div className="grid gap-5 md:grid-cols-2">
-                            {result.jobs.map((job: Job) => (
-                                <JobCard
-                                    key={job._id.toString()}
-                                    job={job}
-                                />
-                            ))}
+                        <div className="space-y-5">
+                            <div>
+                                <p className="m-1 text-2xl text-gray-950 font-extrabold">
+                                    {result.total.toLocaleString()}{" "}
+                                    {result.total === 1 ? "open role" : "open roles"}
+                                </p>
+                                <p className="m-1 text-sm text-gray-950">
+                                    Showing {result.jobs.length} of {result.total.toLocaleString()} open roles
+                                </p>
+                            </div>
+
+                            <div className="grid gap-5 md:grid-cols-2">
+                                {result.jobs.map((job: Job) => (
+                                    <JobCard key={job._id.toString()} job={job} />
+                                ))}
+                            </div>
                         </div>
                     )}
 
                     {result.jobs.length > 0 && totalPages > 1 && (
-                        <Pagination
-                            page={currentPage}
-                            totalPages={totalPages}
-                            params={currentParams}
-                        />
+                        <Pagination page={currentPage} totalPages={totalPages} params={currentParams} />
                     )}
                 </div>
             </div>
