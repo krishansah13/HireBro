@@ -1,117 +1,117 @@
+import Link from "next/link";
+import {
+    SlidersHorizontal,
+    X,
+    ChevronLeft,
+    ChevronRight,
+} from "lucide-react";
+
 import { getJobs } from "@/lib/job-query";
 import { jobQuerySchema } from "@/lib/validation";
+import { Job, JobSearchProps } from "@/types/JobTypes";
+import SearchForm from "@/components/SearchForm";
+import Filters from "@/components/Filters";
+import JobCard from "@/components/JobCard";
+import EmptyState from "@/components/EmptyState";
+import Pagination from "@/components/Pagination";
 
-type JobSearchProps = {
-    q?: string,
-    location?: string,
-    type?: string,
-    remote?: string,
-    sort?: string,
-    page?: number
-}
 
-export default async function JobSearch({ searchParams }: { searchParams: JobSearchProps }) {
+
+export default async function JobSearch({searchParams}: {searchParams: JobSearchProps}) {
     const params = await searchParams;
+
     const parsed = jobQuerySchema.parse(params);
+
+    const remote = parsed.remote === "true" ? true : parsed.remote === "false" ? false : undefined;
 
     const result = await getJobs({
         q: parsed.q,
         location: parsed.location,
         type: parsed.type,
-        remote:
-            (parsed.remote === "true") ? true : (parsed.remote === "false" ? false : undefined),
+        remote,
         sort: parsed.sort ?? "newest",
         page: parsed.page,
-        limit: 10
-    })
+        limit: 10,
+    });
+
+    const currentPage = result.page ?? parsed.page ?? 1;
+
+    const totalPages = result.totalPages ?? Math.ceil(result.total / 10);
+
+    const currentParams: JobSearchProps = {
+        q: parsed.q,
+        location: parsed.location,
+        type: parsed.type,
+        remote: parsed.remote,
+        sort: parsed.sort,
+    };
+
     return (
-        <main className="border-2 border-black px-6 py-2 bg-gray-800 text-white">
-            <h1 className="text-4xl font-bold">
-                Recommend Jobs
-            </h1>
-            <p>
-                Found {result.total} jobs
-            </p>
-            <div className="flex gap-2">
-                <aside className="w-1/6 rounded-2xl px-4 py-3 bg-gray-100 text-black ">
-                    <header className="flex justify-between font-extrabold text-gray-500">
-                        Search Filters
-                        <span className="text-amber-600 text-sm">
-                            Clear All
-                        </span>
-                    </header>
+        <main className="min-h-screen bg-[#fafafa]">
+            <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
 
-                    <div id="jobType" className="p-3 rounded-xl">
-                        <p className="font-bold text-xl">
-                            Job Types
-                        </p>
-                        <div className="rounded-xl px-3 flex flex-col gap-2 mt-2">
-                            <p>
-                                <input type="checkbox" name="fullTime" id="fullTime" /> <span> Full Time </span>
+                <section className="mx-auto max-w-3xl text-center">
+                    <p className="text-sm font-medium text-gray-400">
+                        HIRELANE JOBS
+                    </p>
+
+                    <h1 className="mt-3 text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
+                        Find work that fits you.
+                    </h1>
+
+                    <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">
+                        Discover opportunities from companies looking
+                        for people like you.
+                    </p>
+                </section>
+
+                <section className="mx-auto mt-10 max-w-5xl">
+                    <SearchForm params={currentParams} />
+                </section>
+
+                <section className="mt-12">
+                    <div className="mb-6 flex items-end justify-between">
+                        <div>
+                            <h2 className="text-xl font-semibold tracking-tight text-gray-900">
+                                Latest jobs
+                            </h2>
+
+                            <p className="mt-1 text-sm text-gray-500">
+                                {result.total.toLocaleString()}{" "}
+                                {result.total === 1 ? "opportunity" : "opportunities"}
                             </p>
-                            <p>
-                                <input type="checkbox" name="partTime" id="partTime" /> <span> Part Time </span>
-                            </p>
-                            <p>
-                                <input type="checkbox" name="internship" id="internship" /> <span> Internship </span>
-                            </p>
-                            <p>
-                                <input type="checkbox" name="contractual" id="contractual" /> <span> Contractual</span>
-                            </p>
+                        </div>
+
+                        {/* Mobile filter trigger can be added later */}
+                        <div className="flex items-center gap-2 text-sm text-gray-400 lg:hidden">
+                            <SlidersHorizontal size={16} />
+                            Filters
                         </div>
                     </div>
 
-                    <div id="location" className="p-3 rounded-xl">
-                        <h1 className="text-xl font-bold">
-                            Location
-                        </h1>
-                        <div className="rounded-xl px-3 flex flex-col gap-2 mt-2">
-                            <p>
-                                <input type="checkbox" name="fullTime" id="fullTime" /> <span> Bengaluru</span>
-                            </p>
-                            <p>
-                                <input type="checkbox" name="partTime" id="partTime" /> <span> Hyderabad </span>
-                            </p>
-                            <p>
-                                <input type="checkbox" name="internship" id="internship" /> <span> Gurugram </span>
-                            </p>
-                            <p>
-                                <input type="checkbox" name="contractual" id="contractual" /> <span> Mumbai </span>
-                            </p>
-                            <p>
-                                <input type="checkbox" name="contractual" id="contractual" /> <span> Pune </span>
-                            </p>
-                            <p>
-                                <input type="checkbox" name="remote" id="remote" />
-                                <span> Remote,  India </span>
-                            </p>
+                    <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
+                        {/* Sidebar */}
+                        <div className="hidden lg:block">
+                            <Filters params={currentParams} />
+                        </div>
+
+                        {/* Cards */}
+                        <div>
+                            {result.jobs.length === 0 ? (<EmptyState />) : (
+                                <div className="grid gap-5 md:grid-cols-2">
+                                    {result.jobs.map((job: Job) => (
+                                        <JobCard key={job._id.toString()} job={job}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+
+                            {result.jobs.length > 0 && (
+                                <Pagination page={currentPage} totalPages={totalPages} params={currentParams}/>)}
                         </div>
                     </div>
-
-                    <div id="sort" className="px-3 rounded-xl flex gap-3 border py-1 justify-around">
-                        <h1>
-                            Sort By: 
-                        </h1>
-                            <select name="option" id="option" className="border rounded-xl px-2 py-1 bg-gray-600 text-white">
-                                <option value="newest">Newest</option>
-                                <option value="oldest">Oldest</option>
-                            </select>
-                    </div>
-                </aside>
-                <div className="px-2 py-2 border-2 border-white rounded-2xl w-5/6">
-                    {result.jobs.map((job) => (
-                        <article key={job._id.toString()}>
-                            <h2>{job.title}</h2>
-                            <h3>{job.companyId.name}</h3>
-                            <p>{job.location}</p>
-                            <p>{job.salaryMin}</p>
-                            <p>{job.description}</p>
-                            <hr />
-                        </article>
-                    ))
-                    }
-                </div>
+                </section>
             </div>
         </main>
-    )
-} 
+    );
+}
