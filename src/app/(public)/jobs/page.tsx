@@ -21,13 +21,19 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
 
     const parsed = jobQuerySchema.parse(params);
 
-    const remote = parsed.remote === "true" ? true : parsed.remote === "false" ? false : undefined;
+    const remote =
+    parsed.remote === "true"
+      ? true
+      : parsed.remote === "false"
+        ? false
+        : undefined;
+
 
     const result = await getJobs({
         q: parsed.q,
         location: parsed.location,
         type: parsed.type,
-        remote: parsed.remote,
+        remote,
         sort: parsed.sort ?? "newest",
         page: parsed.page,
         limit: 10,

@@ -6,7 +6,7 @@ export type JobQuery = {
   q?: string;
   location?: string;
   type?: "part-time" | "full-time" | "internship" | "contract";
-  remote?: boolean | string | undefined;
+  remote?: boolean;
   sort?: "newest" | "oldest";
   page?: number;
   limit?: number;
