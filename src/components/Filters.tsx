@@ -22,7 +22,6 @@ export default function Filters({
         params.sort ?? "newest"
     );
 
-    
     useEffect(() => {
         setType(searchParams.get("type") ?? "");
         setRemote(searchParams.get("remote") ?? "any");
