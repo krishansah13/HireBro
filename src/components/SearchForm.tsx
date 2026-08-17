@@ -1,6 +1,6 @@
 import { JobSearchProps } from "@/types/JobTypes";
 
-export default function SearchForm({ params}: {params: JobSearchProps;}) {
+export default function SearchForm({params}: {params: JobSearchProps;}) {
     return (
         <form action="/jobs" method="GET" className="flex flex-col gap-3 sm:flex-row">
             <div className="relative flex-1">
@@ -8,7 +8,7 @@ export default function SearchForm({ params}: {params: JobSearchProps;}) {
             </div>
 
             <div className="relative sm:w-56">
-                <input name="location" type="text" placeholder="Location"                    defaultValue={params.location} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-black"
+                <input name="location" type="text" placeholder="Location" defaultValue={params.location} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-black"
                 />
             </div>
 

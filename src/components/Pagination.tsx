@@ -19,7 +19,7 @@ function buildUrl(params: JobSearchProps, page: number) {
 
     if (params.remote) {
         searchParams.set("remote", params.remote);
-    }
+    } 
 
     if (params.sort) {
         searchParams.set("sort", params.sort);

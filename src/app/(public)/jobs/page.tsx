@@ -16,8 +16,7 @@ import EmptyState from "@/components/EmptyState";
 import Pagination from "@/components/Pagination";
 
 
-
-export default async function JobSearch({searchParams}: {searchParams: JobSearchProps}) {
+export default async function JobSearch({ searchParams }: { searchParams: JobSearchProps }) {
     const params = await searchParams;
 
     const parsed = jobQuerySchema.parse(params);
@@ -28,7 +27,7 @@ export default async function JobSearch({searchParams}: {searchParams: JobSearch
         q: parsed.q,
         location: parsed.location,
         type: parsed.type,
-        remote,
+        remote: parsed.remote,
         sort: parsed.sort ?? "newest",
         page: parsed.page,
         limit: 10,
@@ -47,7 +46,7 @@ export default async function JobSearch({searchParams}: {searchParams: JobSearch
     };
 
     return (
-        <main className="min-h-screen bg-[#fafafa]">
+        <main className="min-h-screen m-6 rounded-2xl bg-gray-50 shadow-2xs">
             <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
 
                 <section className="mx-auto max-w-3xl text-center">
@@ -100,14 +99,14 @@ export default async function JobSearch({searchParams}: {searchParams: JobSearch
                             {result.jobs.length === 0 ? (<EmptyState />) : (
                                 <div className="grid gap-5 md:grid-cols-2">
                                     {result.jobs.map((job: Job) => (
-                                        <JobCard key={job._id.toString()} job={job}
+                                        <JobCard key={job._id.toString()} job={job}
                                         />
                                     ))}
                                 </div>
                             )}
 
                             {result.jobs.length > 0 && (
-                                <Pagination page={currentPage} totalPages={totalPages} params={currentParams}/>)}
+                                <Pagination page={currentPage} totalPages={totalPages} params={currentParams} />)}
                         </div>
                     </div>
                 </section>

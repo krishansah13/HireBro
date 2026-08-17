@@ -2,7 +2,47 @@ import { JobSearchProps } from "@/types/JobTypes";
 import { SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 
-export default function Filters({params}:{params: JobSearchProps;}) {
+function buildFilterUrl(
+    params: JobSearchProps,
+    overrides: Partial<JobSearchProps> = {}
+) {
+    const merged = {
+        ...params,
+        ...overrides,
+    };
+
+    const searchParams = new URLSearchParams();
+
+    if (merged.q) {
+        searchParams.set("q", merged.q);
+    }
+
+    if (merged.location) {
+        searchParams.set("location", merged.location);
+    }
+
+    if (merged.type) {
+        searchParams.set("type", merged.type);
+    }
+
+    if (merged.remote) {
+        searchParams.set("remote", merged.remote);
+    }
+
+    if (merged.sort) {
+        searchParams.set("sort", merged.sort);
+    }
+
+    searchParams.set("page", "1");
+
+    return `/jobs?${searchParams.toString()}`;
+}
+
+export default function Filters({
+    params,
+}: {
+    params: JobSearchProps;
+}) {
     return (
         <aside className="h-fit rounded-2xl border border-gray-200 bg-white p-5">
             <div className="mb-6 flex items-center justify-between">
@@ -15,7 +55,11 @@ export default function Filters({params}:{params: JobSearchProps;}) {
                 </div>
 
                 <Link
-                    href="/jobs"
+                    href={buildFilterUrl(params, {
+                        type: undefined,
+                        remote: undefined,
+                        sort: "newest",
+                    })}
                     className="text-xs text-gray-400 hover:text-black"
                 >
                     Clear
@@ -36,6 +80,7 @@ export default function Filters({params}:{params: JobSearchProps;}) {
                     />
                 )}
 
+                {/* Preserve location */}
                 {params.location && (
                     <input
                         type="hidden"
@@ -43,6 +88,13 @@ export default function Filters({params}:{params: JobSearchProps;}) {
                         value={params.location}
                     />
                 )}
+
+                {/* Always reset pagination when applying filters */}
+                <input
+                    type="hidden"
+                    name="page"
+                    value="1"
+                />
 
                 {/* Job Type */}
                 <div>
@@ -65,7 +117,9 @@ export default function Filters({params}:{params: JobSearchProps;}) {
                                     type="radio"
                                     name="type"
                                     value={value}
-                                    defaultChecked={params.type === value}
+                                    defaultChecked={
+                                        params.type === value
+                                    }
                                     className="h-4 w-4 accent-black"
                                 />
 
@@ -82,11 +136,12 @@ export default function Filters({params}:{params: JobSearchProps;}) {
                     </h3>
 
                     <div className="space-y-3">
+                        {/* Any */}
                         <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-600">
                             <input
                                 type="radio"
                                 name="remote"
-                                value=""
+                                value="any"
                                 defaultChecked={!params.remote}
                                 className="h-4 w-4 accent-black"
                             />
@@ -94,24 +149,30 @@ export default function Filters({params}:{params: JobSearchProps;}) {
                             Any
                         </label>
 
+                        {/* Remote */}
                         <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-600">
                             <input
                                 type="radio"
                                 name="remote"
                                 value="true"
-                                defaultChecked={params.remote === "true"}
+                                defaultChecked={
+                                    params.remote === "true"
+                                }
                                 className="h-4 w-4 accent-black"
                             />
 
                             Remote
                         </label>
 
+                        {/* On-site */}
                         <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-600">
                             <input
                                 type="radio"
                                 name="remote"
                                 value="false"
-                                defaultChecked={params.remote === "false"}
+                                defaultChecked={
+                                    params.remote === "false"
+                                }
                                 className="h-4 w-4 accent-black"
                             />
 
@@ -128,7 +189,9 @@ export default function Filters({params}:{params: JobSearchProps;}) {
 
                     <select
                         name="sort"
-                        defaultValue={params.sort ?? "newest"}
+                        defaultValue={
+                            params.sort ?? "newest"
+                        }
                         className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none focus:border-black"
                     >
                         <option value="newest">

@@ -5,26 +5,11 @@ export const jobQuerySchema = z.object({
 
   location: z.string().optional(),
 
-  type: z
-    .enum([
-      "part-time",
-      "contract",
-      "full-time",
-      "internship",
-    ])
-    .optional(),
+  type: z.enum(["part-time", "contract", "full-time", "internship"]).optional(),
 
-  remote: z
-    .enum(["true", "false"])
-    .optional(),
+  remote: z.enum(["true", "false"]).optional(),
 
-  sort: z
-    .enum(["newest", "oldest"])
-    .optional(),
+  sort: z.enum(["newest", "oldest"]).optional(),
 
-  page: z.coerce
-    .number()
-    .int()
-    .positive()
-    .default(1),
+  page: z.coerce.number().int().positive().default(1),
 });

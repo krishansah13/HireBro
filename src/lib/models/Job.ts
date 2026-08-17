@@ -37,7 +37,7 @@ const jobSchema = new mongoose.Schema(
     },
     isRemote: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     salaryMin: {
       type: Number,
