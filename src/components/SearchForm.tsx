@@ -25,7 +25,7 @@ export default function SearchForm({params}: {params: JobSearchProps;}) {
                 <input type="hidden" name="sort" value={params.sort}/>
             )}
 
-            <button type="submit" className="h-12 rounded-xl bg-linear-100 from-gray-800 via-gray-600 to-mauve-900 px-7 text-sm font-medium text-white transition hover:scale-105 cursor-pointer h">
+            <button type="submit" className="h-12 rounded-xl bg-linear-130 from-zinc-900  to-zinc-700 px-7 text-sm font-medium text-white transition hover:scale-105 cursor-pointer h">
                 Search
             </button>
         </form>

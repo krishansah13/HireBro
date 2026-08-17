@@ -100,7 +100,7 @@ export default function Filters({
                 <button
                     type="button"
                     onClick={handleClear}
-                    className="text-xs text-gray-300 hover:text-black"
+                    className="text-xs text-gray-300 hover:cursor-pointer"
                 >
                     Clear
                 </button>
