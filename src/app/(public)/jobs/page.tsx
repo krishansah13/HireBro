@@ -47,9 +47,11 @@ export default async function JobSearch({
         <main className="">
             <HeroSection params={currentParams} />
             <JobSection result={result} currentParams={currentParams} />
+            <div className="container mx-auto px-4 py-8">
             {result.jobs.length > 0 && totalPages > 1 && (
                 <Pagination page={currentPage} totalPages={totalPages} params={currentParams} />
             )}
+            </div>
             <FooterSection />
         </main>
     );
