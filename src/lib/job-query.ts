@@ -94,3 +94,16 @@ export async function getJobs(query: JobQuery) {
     totalPages: Math.ceil(total / pageLimit),
   };
 }
+
+export async function getJobBySlug(slug: string) {
+  await connectToDatabase();
+
+  const job = await Job.findOne({
+    slug,
+    status: "published",
+  })
+    .populate("companyId", "name logoURL slug")
+    .lean();
+
+  return job;
+}

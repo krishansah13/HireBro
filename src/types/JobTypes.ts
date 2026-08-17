@@ -10,6 +10,7 @@ export type JobSearchProps = {
 export type Job = {
     _id: string | { toString(): string };
     title: string;
+    slug: string;
     location: string;
     description: string;
     type?: string;

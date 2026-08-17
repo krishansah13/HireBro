@@ -52,7 +52,7 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
     };
 
     return (
-        <main className="min-h-screen m-6 rounded-2xl bg-gray-50 shadow-2xs">
+        <main className="min-h-screen m-6 rounded-2xl bg-gray-100 shadow-2xs">
             <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
 
                 <section className="mx-auto max-w-3xl text-center">
@@ -105,10 +105,9 @@ export default async function JobSearch({ searchParams }: { searchParams: JobSea
                             {result.jobs.length === 0 ? (<EmptyState />) : (
                                 <div className="grid gap-5 md:grid-cols-2">
                                     {result.jobs.map((job: Job) => (
-                                        <JobCard key={job._id.toString()} job={job}
-                                        />
+                                        <JobCard key={job._id.toString()} job={job} />
                                     ))}
-                                </div>
+                                </div>  
                             )}
 
                             {result.jobs.length > 0 && (

@@ -40,10 +40,8 @@ export default function JobCard({
 }: {
     job: Job;
 }) {
-    const jobId = job._id.toString();
-
     return (
-        <Link href={`/jobs/description/${jobId}`} className="group block">
+        <Link href={`/jobs/${job.slug}`} className="group block">
             <article className="flex min-h-80 flex-col rounded-2xl bg-linear-130 from-zinc-900  to-zinc-700 to p-6 transition duration-200 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg text-white">
                 {/* Company */}
                 <div className="flex items-start justify-between">
