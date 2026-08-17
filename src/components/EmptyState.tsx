@@ -7,22 +7,22 @@ export default function EmptyState() {
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
                 <Briefcase
                     size={22}
-                    className="text-gray-500"
+                    className="text-gray-900"
                 />
             </div>
 
-            <h2 className="mt-5 text-lg font-semibold">
+            <h2 className="mt-5 text-lg font-semibold text-gray-900">
                 No jobs found
             </h2>
 
-            <p className="mt-2 max-w-md text-sm text-gray-500">
+            <p className="mt-2 max-w-md text-sm text-gray-900">
                 Try changing your search or removing some
                 filters to see more opportunities.
             </p>
 
             <Link
                 href="/jobs"
-                className="mt-5 rounded-xl bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800"
+                className="mt-5 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700"
             >
                 Clear filters
             </Link>
