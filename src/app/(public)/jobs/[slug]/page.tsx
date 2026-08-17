@@ -23,12 +23,12 @@ export default async function JobDetail({
 
     return (
         <main className="min-h-screen bg-white px-4 py-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl  -gray-200 bg-gray-50 shadow-sm">
+            <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-gray-50 shadow-sm">
 
                 {/* Header */}
-                <section className="relative overflow-hidden -b -gray-200 bg-white">
+                <section className="relative overflow-hidden bg-white">
                     {/* Decorative background */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.10),transparent_35%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(3, 3, 40, 0.1),transparent_35%)]" />
 
                     <div className="relative mx-auto max-w-6xl px-6 py-12 sm:px-10 lg:py-16">
                         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
@@ -83,7 +83,7 @@ export default async function JobDetail({
 
                             {/* Apply button - desktop */}
                             <div className="hidden sm:block">
-                                <button className="rounded-xl bg-gray-950 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/10 transition hover:bg-gray-800">
+                                <button className="rounded-xl bg-gray-950 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/10 transition hover:bg-gray-800 hover:cursor-pointer">
                                     Apply for this job
                                 </button>
                             </div>
@@ -95,7 +95,7 @@ export default async function JobDetail({
                 <section className="mx-auto grid max-w-6xl gap-8 px-6 py-10 sm:px-10 lg:grid-cols-[1fr_320px] lg:py-14">
 
                     {/* Main content */}
-                    <article className="rounded-2xl  -gray-200 bg-white p-6 shadow-sm sm:p-8">
+                    <article className="rounded-2xl  bg-white p-6 shadow-sm sm:p-8">
 
                         <div>
                             <h2 className="text-xl font-bold text-gray-950">
@@ -157,7 +157,7 @@ export default async function JobDetail({
 
                     {/* Sidebar */}
                     <aside className="lg:sticky lg:top-6 lg:h-fit">
-                        <div className="rounded-2xl  -gray-200 bg-white p-6 shadow-sm">
+                        <div className="rounded-2xl  bg-white p-6 shadow-sm">
 
                             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-950 text-lg font-bold text-white">
                                 {company?.name?.charAt(0).toUpperCase() ?? "H"}
@@ -170,7 +170,6 @@ export default async function JobDetail({
                             <p className="mt-1 text-sm text-gray-500">
                                 {job.location}
                             </p>
-
                             <div className="my-6 h-px bg-gray-100" />
 
                             <div className="space-y-4">
@@ -200,9 +199,17 @@ export default async function JobDetail({
                                         {job.remote ? "Remote" : "On-site"}
                                     </span>
                                 </div>
+                                <div className="flex items-center justify-between text-sm">
+                                    <span className="text-gray-500">
+                                        Salary Structure
+                                    </span>
+                                    <span className="font-medium text-gray-900">
+                                        {job.salaryMin?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} - {job.salaryMax?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} per year
+                                    </span>
+                                </div>
                             </div>
 
-                            <button className="mt-7 w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-800">
+                            <button className="mt-7 w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-gray-800 hover:cursor-pointer">
                                 Apply for this job
                             </button>
 
@@ -215,8 +222,8 @@ export default async function JobDetail({
                 </section>
 
                 {/* Mobile CTA */}
-                <div className="sticky bottom-0 -t -gray-200 bg-white/95 p-4 backdrop-blur sm:hidden">
-                    <button className="w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white shadow-lg">
+                <div className="sticky bottom-0 -t bg-white/95 p-4 backdrop-blur sm:hidden">
+                    <button className="w-full rounded-xl bg-gray-950 px-5 py-3.5 text-sm font-semibold text-white shadow-lg hover:cursor-pointer">
                         Apply for this job
                     </button>
                 </div>
