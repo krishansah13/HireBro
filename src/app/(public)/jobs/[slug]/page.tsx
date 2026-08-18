@@ -1,0 +1,194 @@
+import { notFound } from "next/navigation";
+import { getJobBySlug } from "@/lib/job-query";
+import { ArrowUpRight } from "lucide-react";
+
+export default async function JobDetail({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const { slug } = await params;
+    const job = await getJobBySlug(slug);
+
+    if (!job) {
+        notFound();
+    }
+
+    const company =
+        job.companyId && typeof job.companyId === "object"
+            ? job.companyId
+            : null;
+
+    const jobType =
+        job.type.charAt(0).toUpperCase() + job.type.slice(1);
+
+    return (
+        <main className="min-h-screen bg-white">
+            <div className="overflow-hidden bg-gray-50 shadow-sm">
+
+                {/* Header */}
+                <section className="relative overflow-hidden bg-linear-100 from-white via-white to-indigo-200">
+                    <div className="relative px-6 py-12 sm:px-10 lg:py-16">
+                        <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+                            <div className="">
+                                {/* Brand */}
+                                <div className="mb-6 flex items-center gap-3">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#2e46ba] text-sm font-extrabold text-white">
+                                        {company?.name?.charAt(0).toUpperCase() ?? "H"}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-gray-900">
+                                            {company?.name || "Company"}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            HIRELANE JOBS
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <h1 className="text-4xl font-extrabold tracking-tight text-gray-950 sm:text-5xl">
+                                    {job.title}
+                                </h1>
+
+                                <div className="mt-6 flex flex-wrap gap-3">
+                                    <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700">
+                                        <svg
+                                            className="h-4 w-4 text-gray-400"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                        >
+                                            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                                            <circle cx="12" cy="10" r="2.5" />
+                                        </svg>
+                                        {job.location}
+                                    </span>
+
+                                    <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-4 py-2 text-sm font-medium text-gray">
+                                        <span className="h-2 w-2 rounded-full bg-indigo-500" />
+                                        {jobType}
+                                    </span>
+
+                                    <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
+                                        <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                                        {job.remote ? "Remote" : "On-site"}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Apply button - desktop */}
+                            <div className="hidden sm:block">
+                                <button className="rounded-xl bg-[#2e46ba] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/10 transition hover:bg-blue-700 hover:cursor-pointer">
+                                    <p className="flex items-center gap-2">
+                                        Apply for this job <ArrowUpRight size={16} />
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Content */}
+                <section className="mx-auto grid gap-8 px-6 py-10 sm:px-10 lg:grid-cols-[1fr_320px] lg:py-14">
+
+                    {/* Left: About */}
+                    <article className="rounded-2xl bg-white p-6 shadow-sm sm:p-8">
+                        <h2 className="text-xl font-bold text-gray-950">
+                            About the role
+                        </h2>
+
+                        <div className="mt-5 whitespace-pre-line text-[15px] leading-7 text-gray-600">
+                            {job.description}
+                        </div>
+                    </article>
+
+                    {/* Right column */}
+                    <div className="flex flex-col gap-8">
+
+                        {/* Job Details - TOP RIGHT */}
+                        <section className="rounded-2xl bg-white p-6 shadow-sm sm:p-8">
+                            <h2 className="text-xl font-bold text-gray-950">
+                                Job details
+                            </h2>
+
+                            <dl className="mt-6 grid gap-4">
+                                <div className="rounded-xl bg-gray-50 p-4">
+                                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                        Location
+                                    </dt>
+                                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                                        {job.location}
+                                    </dd>
+                                </div>
+
+                                <div className="rounded-xl bg-gray-50 p-4">
+                                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                        Employment type
+                                    </dt>
+                                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                                        {jobType}
+                                    </dd>
+                                </div>
+
+                                <div className="rounded-xl bg-gray-50 p-4">
+                                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                        Work arrangement
+                                    </dt>
+                                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                                        {job.remote ? "Remote" : "On-site"}
+                                    </dd>
+                                </div>
+
+                                <div className="rounded-xl bg-gray-50 p-4">
+                                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                        Company
+                                    </dt>
+                                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                                        {company?.name || "—"}
+                                    </dd>
+                                </div>
+                                <div className="rounded-xl bg-gray-50 p-4">
+                                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                        Minimum Salary
+                                    </dt>
+                                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                                        {job.salaryMin?.toLocaleString("en-US", {
+                                            style: "currency",
+                                            currency: "USD",
+                                        })}
+                                        <span className="ml-1 text-xs text-gray-500">
+                                            per year
+                                        </span>
+                                    </dd>
+                                </div>
+                                <div className="rounded-xl bg-gray-50 p-4">
+                                    <dt className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                        Maximum Salary
+                                    </dt>
+                                    <dd className="mt-1 text-sm font-semibold text-gray-900">
+                                        {job.salaryMax?.toLocaleString("en-US", {
+                                            style: "currency",
+                                            currency: "USD",
+                                        })}
+                                        <span className="ml-1 text-xs text-gray-500">
+                                            per year
+                                        </span>
+                                    </dd>
+                                </div>
+                            </dl>
+                        </section>
+
+                    </div>
+                </section>
+
+                {/* Mobile CTA */}
+                <div className="sticky bottom-0 -t bg-white/95 p-4 backdrop-blur sm:hidden">
+                    <button className="w-full rounded-xl bg-[#2E46BA] px-5 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-blue-700 hover:cursor-pointer">
+                        Apply for this job
+                    </button>
+                </div>
+            </div>
+        </main>
+    );
+}

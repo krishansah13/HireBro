@@ -1,76 +1,26 @@
-"use client";
+import { Suspense } from "react";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import LoginForm from "./LoginForm";
 
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+function LoginFallback() {
+    return (
+        <main className="flex flex-1 items-center justify-center bg-linear-100 from-white via-white to-indigo-300 px-6 py-16">
+            <div className="h-96 w-full max-w-md animate-pulse rounded-2xl bg-white/80 shadow-[0_10px_30px_rgba(76,61,130,0.10)]" />
+        </main>
+    );
+}
 
-export default function Login() {
-  const router = useRouter();
+export default async function LoginPage() {
+    const session = await auth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
-  ) {
-    event.preventDefault();
-    console.log(email, password)
-    setError("");
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (result?.error) {
-      setError("Invalid email or password");
-      return;
+    if (session?.user) {
+        redirect(session.user.role === "employer" ? "/employer" : "/dashboard");
     }
 
-    router.push("/");
-  }
-
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">
-          Email:
-        </label>
-
-        <input
-          id="email"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(event) =>
-            setEmail(event.target.value)
-          }
-          required
-        />
-
-        <label htmlFor="password">
-          Password:
-        </label>
-
-        <input
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(event) =>
-            setPassword(event.target.value)
-          }
-          required
-        />
-
-        {error && <p>{error}</p>}
-
-        <button type="submit">
-          Login
-        </button>
-      </form>
-    </div>
-  );
+    return (
+        <Suspense fallback={<LoginFallback />}>
+            <LoginForm />
+        </Suspense>
+    );
 }

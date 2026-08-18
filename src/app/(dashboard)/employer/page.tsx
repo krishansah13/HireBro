@@ -4,8 +4,12 @@ import { redirect } from "next/navigation";
 export default async function EmployerPage() {
     const session = await auth();
 
-    if (!session || session.user.role !== "employer") {
+    if (!session) {
         redirect("/login");
+    }
+
+    if (session.user.role !== "employer") {
+        redirect("/dashboard");
     }
 
     return (

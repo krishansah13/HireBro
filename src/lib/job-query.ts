@@ -94,3 +94,37 @@ export async function getJobs(query: JobQuery) {
     totalPages: Math.ceil(total / pageLimit),
   };
 }
+
+export async function getJobBySlug(slug: string) {
+  await connectToDatabase();
+
+  const job = await Job.findOne({
+    slug,
+    status: "published",
+  })
+    .populate("companyId", "name logoURL slug")
+    .lean();
+
+  return job;
+}
+
+export async function getLandingContent() {
+  await connectToDatabase();
+
+  const [featured, companyCount, companies, remoteRoles] = await Promise.all([
+    getJobs({ sort: "newest", limit: 6 }),
+    Company.countDocuments(),
+    Company.find({}).select("name logoURL slug").limit(6).lean(),
+    Job.countDocuments({ status: "published", isRemote: true }),
+  ]);
+
+  return {
+    jobs: featured.jobs,
+    stats: {
+      openRoles: featured.total,
+      companies: companyCount,
+      remoteRoles,
+    },
+    companies,
+  };
+}

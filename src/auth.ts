@@ -8,6 +8,7 @@ import { authConfig } from "./auth.config";
 
 export const {handlers, signIn, signOut, auth} = NextAuth ({
     ...authConfig,
+    trustHost: true,
     providers : [
         Credentials({
             credentials:{
@@ -24,10 +25,12 @@ export const {handlers, signIn, signOut, auth} = NextAuth ({
                 if(!credentials?.email || !credentials?.password) {
                     return null;
                 }
+
+                const email = String(credentials.email).trim().toLowerCase();
                 
                 await connectToDatabase();
 
-                const user = await User.findOne({email : credentials.email});
+                const user = await User.findOne({email});
                 
                 if(!user) {
                     return null;
