@@ -1,57 +1,55 @@
-import { getJobs } from "@/lib/job-query";
+import { Suspense } from "react";
 import { jobQuerySchema } from "@/lib/validation";
 import { JobSearchProps } from "@/types/JobTypes";
 import HeroSection from "@/components/HeroSection";
-import JobSection from "@/components/JobSection";
-import Pagination from "@/components/Pagination";
-import FooterSection from "@/components/FooterSection";
+import Filters from "@/components/Filters";
+import JobResults from "@/components/JobResults";
+
+function JobsFallback() {
+  return (
+    <div className="min-h-100 animate-pulse space-y-4 p-2">
+      <div className="h-8 w-48 rounded bg-gray-100" />
+      <div className="h-24 rounded-xl bg-gray-100" />
+      <div className="h-24 rounded-xl bg-gray-100" />
+      <div className="h-24 rounded-xl bg-gray-100" />
+    </div>
+  );
+}
 
 export default async function JobSearch({
-    searchParams,
+  searchParams,
 }: {
-    searchParams: Promise<JobSearchProps>;
+  searchParams: Promise<JobSearchProps>;
 }) {
-    const params = await searchParams;
+  const params = await searchParams;
+  const parsed = jobQuerySchema.parse(params);
 
-    const parsed = jobQuerySchema.parse(params);
+  const currentParams: JobSearchProps = {
+    q: parsed.q,
+    location: parsed.location,
+    type: parsed.type,
+    remote: parsed.remote,
+    sort: parsed.sort,
+    page: parsed.page,
+  };
 
-    const remote =
-        parsed.remote === "true"
-            ? true
-            : parsed.remote === "false"
-                ? false
-                : undefined;
+  const suspenseKey = JSON.stringify(currentParams);
 
-    const result = await getJobs({
-        q: parsed.q,
-        location: parsed.location,
-        type: parsed.type,
-        remote,
-        sort: parsed.sort ?? "newest",
-        page: parsed.page,
-        limit: 10,
-    });
+  return (
+    <main>
+      <HeroSection params={currentParams} />
 
-    const currentPage = result.page ?? 1;
-    const totalPages = Math.ceil(result.total / 10);
+      <section className="min-h-125 bg-white p-7">
+        <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
+          <div className="hidden lg:block">
+            <Filters params={currentParams} />
+          </div>
 
-    const currentParams: JobSearchProps = {
-        q: parsed.q,
-        location: parsed.location,
-        type: parsed.type,
-        remote: parsed.remote,
-        sort: parsed.sort,
-    };
-
-    return (
-        <main className="">
-            <HeroSection params={currentParams} />
-            <JobSection result={result} currentParams={currentParams} />
-            <div className="container mx-auto px-4 py-8">
-            {result.jobs.length > 0 && totalPages > 1 && (
-                <Pagination page={currentPage} totalPages={totalPages} params={currentParams} />
-            )}
-            </div>
-        </main>
-    );
+          <Suspense key={suspenseKey} fallback={<JobsFallback />}>
+            <JobResults currentParams={currentParams} />
+          </Suspense>
+        </div>
+      </section>
+    </main>
+  );
 }
