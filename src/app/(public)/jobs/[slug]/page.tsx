@@ -72,7 +72,7 @@ export default async function JobDetail({
 
                                     <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
                                         <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                                        {job.remote ? "Remote" : "On-site"}
+                                        {job.isRemote ? "Remote" : "On-site"}
                                     </span>
                                 </div>
                             </div>
