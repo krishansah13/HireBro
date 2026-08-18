@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getJobBySlug } from "@/lib/job-query";
 import { ArrowUpRight } from "lucide-react";
+import { formatInr } from "@/lib/utils/format";
 
 export default async function JobDetail({
     params,
@@ -136,7 +137,7 @@ export default async function JobDetail({
                                         Work arrangement
                                     </dt>
                                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                                        {job.remote ? "Remote" : "On-site"}
+                                        {job.isRemote ? "Remote" : "On-site"}
                                     </dd>
                                 </div>
 
@@ -153,10 +154,7 @@ export default async function JobDetail({
                                         Minimum Salary
                                     </dt>
                                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                                        {job.salaryMin?.toLocaleString("en-US", {
-                                            style: "currency",
-                                            currency: "USD",
-                                        })}
+                                        {formatInr(job.salaryMin)}
                                         <span className="ml-1 text-xs text-gray-500">
                                             per year
                                         </span>
@@ -167,10 +165,7 @@ export default async function JobDetail({
                                         Maximum Salary
                                     </dt>
                                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                                        {job.salaryMax?.toLocaleString("en-US", {
-                                            style: "currency",
-                                            currency: "USD",
-                                        })}
+                                       {formatInr(job.salaryMax)}
                                         <span className="ml-1 text-xs text-gray-500">
                                             per year
                                         </span>
