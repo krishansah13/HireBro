@@ -78,10 +78,7 @@ export default function Pagination({
                             pageNumber - previousPage > 1;
 
                         return (
-                            <div
-                                key={pageNumber}
-                                className="flex items-center gap-1"
-                            >
+                            <div key={pageNumber} className="flex items-center gap-1" >
                                 {showEllipsis && (
                                     <span className="px-2 text-gray-400">
                                         ...
@@ -91,7 +88,7 @@ export default function Pagination({
                                 <Link
                                     href={buildUrl(params, pageNumber)}
                                     className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm ${pageNumber === page
-                                        ? "bg-black text-white"
+                                        ? "bg-[#2E46BA] text-white"
                                         : "200 bg-white text-gray-700 hover:bg-gray-50"
                                         }`}
                                 >
