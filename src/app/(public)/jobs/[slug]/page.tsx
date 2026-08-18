@@ -1,7 +1,30 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getJobBySlug } from "@/lib/job-query";
+import { getJobBySlug, getPublishedJobSlugs } from "@/lib/job-query";
 import { ArrowUpRight } from "lucide-react";
 import { formatInr } from "@/lib/utils/format";
+
+export const revalidate = 3600; // 1 hour
+
+export async function generateStaticParams() {
+    const jobs = await getPublishedJobSlugs();;
+    return jobs.map((job: {slug:string})=>({slug:job.slug}));
+}
+
+export async function generateMetadata({params} : {params : Promise<{slug:string}>;}) : Promise<Metadata> {
+    const {slug} = await params;
+    const job =  await getJobBySlug(slug);
+    if(!job) {
+        return {title : "Job Not Found"}
+    }
+    const company = job.companyId && typeof job.companyId === "object" ? job.companyId : null;
+
+    const description : string = typeof job.description === "string"?job.description.slice(0,160) : "View this role on Hirelane"
+
+    return {
+        title : company?.name ? `${job.title} at ${company.name}` : job.title, description
+    };
+}
 
 export default async function JobDetail({
     params,
