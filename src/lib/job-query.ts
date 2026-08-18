@@ -107,3 +107,24 @@ export async function getJobBySlug(slug: string) {
 
   return job;
 }
+
+export async function getLandingContent() {
+  await connectToDatabase();
+
+  const [featured, companyCount, companies, remoteRoles] = await Promise.all([
+    getJobs({ sort: "newest", limit: 6 }),
+    Company.countDocuments(),
+    Company.find({}).select("name logoURL slug").limit(6).lean(),
+    Job.countDocuments({ status: "published", isRemote: true }),
+  ]);
+
+  return {
+    jobs: featured.jobs,
+    stats: {
+      openRoles: featured.total,
+      companies: companyCount,
+      remoteRoles,
+    },
+    companies,
+  };
+}

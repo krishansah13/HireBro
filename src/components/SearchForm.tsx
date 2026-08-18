@@ -10,14 +10,14 @@ export default function SearchForm({
         <form
             action="/jobs"
             method="GET"
-            className="flex h-[70px] w-full items-center rounded-2xl bg-[#fbf9ff] px-3 shadow-[0_4px_12px_rgba(0,0,0,0.10)]"
+            className="flex w-full flex-col rounded-2xl bg-[#fbf9ff] p-3 shadow-[0_4px_12px_rgba(0,0,0,0.10)] sm:h-[70px] sm:flex-row sm:items-center sm:p-0 sm:px-3"
         >
             {/* Job search */}
-            <div className="flex h-full flex-1 items-center">
+            <div className="flex h-12 flex-1 items-center sm:h-full">
                 <Search
                     size={16}
                     strokeWidth={2.2}
-                    className="ml-5 mr-5 shrink-0 text-[#484855]"
+                    className="ml-3 mr-3 shrink-0 text-[#484855] sm:ml-5 sm:mr-5"
                 />
 
                 <input
@@ -30,14 +30,15 @@ export default function SearchForm({
             </div>
 
             {/* Divider */}
-            <div className="h-[38px] w-px bg-[#c9c6d1]" />
+            <div className="hidden h-[38px] w-px bg-[#c9c6d1] sm:block" />
+            <div className="mx-3 h-px bg-[#c9c6d1] sm:hidden" />
 
             {/* Location */}
-            <div className="flex h-full flex-1 items-center">
+            <div className="flex h-12 flex-1 items-center sm:h-full">
                 <MapPin
                     size={16}
                     strokeWidth={2.2}
-                    className="ml-8 mr-5 shrink-0 text-[#484855]"
+                    className="ml-3 mr-3 shrink-0 text-[#484855] sm:ml-8 sm:mr-5"
                 />
 
                 <input
@@ -72,7 +73,7 @@ export default function SearchForm({
             {/* Button */}
             <button
                 type="submit"
-                className="flex h-12 w-32 shrink-0 items-center justify-center gap-4 rounded-[14px] bg-[#1739ad] text-[16px] font-semibold text-white transition hover:bg-[#12329c]"
+                className="mt-2 flex h-12 w-full shrink-0 items-center justify-center gap-4 rounded-[14px] bg-[#1739ad] text-[16px] font-semibold text-white transition hover:bg-[#12329c] sm:mt-0 sm:w-32"
             >
                 Search
                 <ArrowRight size={22} />

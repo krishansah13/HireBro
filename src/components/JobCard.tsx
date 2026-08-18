@@ -75,9 +75,9 @@ export default function JobCard({ job }: { job: Job }) {
                         ring-gray-100
                     "
                 >
-                    {job.companyId.logo ? (
+                    {job.companyId.logo || job.companyId.logoURL ? (
                         <img
-                            src={job.companyId.logo}
+                            src={job.companyId.logo || job.companyId.logoURL}
                             alt={job.companyId.name}
                             className="h-full w-full object-contain p-2"
                         />
@@ -160,7 +160,7 @@ export default function JobCard({ job }: { job: Job }) {
                             </>
                         )}
 
-                        {job.remote && (
+                        {(job.remote ?? job.isRemote) && (
                             <>
                                 <span className="text-gray-300">•</span>
                                 <span>Remote</span>
@@ -186,7 +186,7 @@ export default function JobCard({ job }: { job: Job }) {
                             </span>
                         )}
 
-                        {job.remote && (
+                        {(job.remote ?? job.isRemote) && (
                             <span
                                 className="
                                     rounded-md

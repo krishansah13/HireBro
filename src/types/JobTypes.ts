@@ -15,10 +15,12 @@ export type Job = {
     description: string;
     type?: string;
     remote?: boolean;
+    isRemote?: boolean;
     createdAt?: string | Date;
 
     companyId: {
         name: string;
         logo?: string;
+        logoURL?: string;
     };
 };
