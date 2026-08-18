@@ -1,25 +1,24 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import DashboardSidebar from "@/components/DashboardSidebar";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    const session = await auth();
+  const session = await auth();
 
-    if (!session) {
-        redirect("/login");
-    }
+  if (!session?.user) {
+    redirect("/login");
+  }
 
-    return (
-        <div>
-            <header>
-                <h1>Hirelane Dashboard</h1>
-                <p>Welcome, {session.user.name}</p>
-            </header>
-
-            <main>{children}</main>
-        </div>
-    );
+  return (
+    <div className="flex min-h-0 flex-1 flex-col bg-[#f7f5ff] lg:flex-row">
+      <DashboardSidebar role={session.user.role} name={session.user.name ?? "Account"} />
+      <main className="min-w-0 flex-1 px-4 py-6 sm:px-8">{children}</main>
+    </div>
+  );
 }
