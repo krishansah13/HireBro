@@ -1,5 +1,27 @@
+import mongoose, { Schema } from "mongoose";
 
-import mongoose, {Schema} from "mongoose";
+const STAGE_VALUES = [
+  "applied",
+  "screening",
+  "interview",
+  "offer",
+  "rejected",
+] as const;
+
+const stageHistorySchema = new Schema(
+  {
+    stage: {
+      type: String,
+      enum: STAGE_VALUES,
+      required: true,
+    },
+    changedAt: {
+      type: Date,
+      required: true,
+    },
+  },
+  { _id: false },
+);
 
 const applicationSchema = new Schema({
   jobId: {
@@ -21,19 +43,26 @@ const applicationSchema = new Schema({
   },
   stage: {
     type: String,
-    enum: ["applied", "screening", "interview", "offer", "rejected"],
+    enum: STAGE_VALUES,
     required: true,
+    default: "applied",
   },
   appliedAt: {
     type: Date,
     required: true,
-    default: Date.now(),
+    default: Date.now,
   },
   stageChangedAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
+  },
+  stageHistory: {
+    type: [stageHistorySchema],
+    default: [],
   },
 });
+
+applicationSchema.index({ jobId: 1, userId: 1 }, { unique: true });
 
 const Application =
   mongoose.models.Application ||
