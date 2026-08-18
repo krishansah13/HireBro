@@ -24,7 +24,6 @@ export type Job = {
   location: string;
   description: string;
   type?: string;
-  remote?: boolean;
   isRemote?: boolean;
   salaryMin?: number;
   salaryMax?: number;

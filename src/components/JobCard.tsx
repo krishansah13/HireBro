@@ -160,7 +160,7 @@ export default function JobCard({ job }: { job: Job }) {
                             </>
                         )}
 
-                        {(job.remote ?? job.isRemote) && (
+                        {job.isRemote && (
                             <>
                                 <span className="text-gray-300">•</span>
                                 <span>Remote</span>
@@ -186,7 +186,7 @@ export default function JobCard({ job }: { job: Job }) {
                             </span>
                         )}
 
-                        {(job.remote ?? job.isRemote) && (
+                        {job.isRemote && (
                             <span
                                 className="
                                     rounded-md
