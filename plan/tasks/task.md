@@ -11,7 +11,7 @@ Update this file after every task. Implement one remaining task at a time.
 | 05 | `/jobs` URL-driven search, filters, pagination | done |
 | 06 | `/jobs/[slug]` public detail UI | done |
 | 07 | Foundation gaps: sidebar, proxy roles, stageHistory, unique applications, `.env.example` | done |
-| 08 | Public SEO, tagged cache, Suspense, `isRemote`/INR fixes | pending |
+| 08 | Public SEO, tagged cache, Suspense, `isRemote`/INR fixes | done |
 | 09 | Parallel + intercepting route job modal | pending |
 | 10 | Cloudinary + `POST /api/upload` | pending |
 | 11 | Apply Server Action + form with `useActionState` | pending |
