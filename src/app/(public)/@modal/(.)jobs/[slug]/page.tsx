@@ -11,6 +11,7 @@ export default async function JobModalPage({params} : {params : Promise<{slug : 
 
     return(
         <JobModal 
+            jobId = {String(job._id)}
             slug={slug}
             title = {job.title}
             description={job.description}

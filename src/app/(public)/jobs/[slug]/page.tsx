@@ -199,10 +199,8 @@ export default async function JobDetail({
                 </section>
 
                 {/* Mobile CTA */}
-                <div className="sticky bottom-0 -t bg-white/95 p-4 backdrop-blur sm:hidden">
-                    <button className="w-full rounded-xl bg-[#2E46BA] px-5 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-blue-700 hover:cursor-pointer">
-                        Apply for this job
-                    </button>
+                <div className="sticky bottom-0 bg-white/95 p-4 backdrop-blur sm:hidden">
+                    <ApplyForm jobId={jobId} slug={slug} compact />
                 </div>
             </div>
         </main>
