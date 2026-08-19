@@ -256,7 +256,7 @@ async function seed(): Promise<void> {
     /* ------------------------------ */
 
     console.log("Creating companies...");
-
+    await Application.syncIndexes();
     const companies = await Company.insertMany(companiesData);
 
     /*
