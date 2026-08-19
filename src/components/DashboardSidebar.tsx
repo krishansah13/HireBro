@@ -2,8 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Briefcase, FileText, LayoutDashboard, PlusCircle, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  Briefcase,
+  FileText,
+  LayoutDashboard,
+  PlusCircle,
+  Users,
+} from "lucide-react";
 import { signOut } from "next-auth/react";
+import { getApplicationNavTitle } from "@/lib/actions/application-nav";
 
 type DashboardSidebarProps = {
   role: "seeker" | "employer";
@@ -23,6 +31,35 @@ export default function DashboardSidebar({ role, name }: DashboardSidebarProps) 
   const pathname = usePathname();
   const links = role === "employer" ? employerLinks : seekerLinks;
 
+  const applicationMatch = pathname.match(
+    /^\/dashboard\/applications\/([^/]+)/,
+  );
+  const applicationId = applicationMatch?.[1] ?? null;
+
+  const [jobTitle, setJobTitle] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTitle() {
+      if (!applicationId || role !== "seeker") {
+        setJobTitle(null);
+        return;
+      }
+
+      const title = await getApplicationNavTitle(applicationId);
+      if (!cancelled) {
+        setJobTitle(title);
+      }
+    }
+
+    loadTitle();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [applicationId, role]);
+
   return (
     <aside className="flex w-full flex-col border-b border-gray-200 bg-white lg:w-60 lg:border-b-0 lg:border-r">
       <div className="px-5 py-5">
@@ -35,10 +72,9 @@ export default function DashboardSidebar({ role, name }: DashboardSidebarProps) 
       <nav className="flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-col lg:overflow-visible lg:pb-6">
         {links.map((link) => {
           const active =
-            pathname === link.href ||
-            (link.href !== "/dashboard" &&
-              link.href !== "/employer" &&
-              pathname.startsWith(link.href));
+            link.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname === link.href || pathname.startsWith(`${link.href}/`);
           const Icon = link.icon;
 
           return (
@@ -56,12 +92,17 @@ export default function DashboardSidebar({ role, name }: DashboardSidebarProps) 
             </Link>
           );
         })}
-        {role === "seeker" && pathname.startsWith("/dashboard/applications/") && (
-          <span className="inline-flex items-center gap-2 rounded-lg bg-[#eef0ff] px-3 py-2 text-sm font-medium text-[#2E46BA]">
-            <FileText size={16} />
-            Application
+
+        {role === "seeker" && applicationId && (
+          <span
+            title={jobTitle ?? "Application"}
+            className="inline-flex items-center gap-2 rounded-lg bg-[#eef0ff] px-3 py-2 text-sm font-medium text-[#2E46BA]"
+          >
+            <FileText size={16} className="shrink-0" />
+            <span className="truncate">{jobTitle ?? "Loading…"}</span>
           </span>
         )}
+
         {role === "employer" && pathname.includes("/applicants") && (
           <span className="inline-flex items-center gap-2 rounded-lg bg-[#eef0ff] px-3 py-2 text-sm font-medium text-[#2E46BA]">
             <Users size={16} />
