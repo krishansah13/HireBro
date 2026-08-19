@@ -13,7 +13,7 @@ Update this file after every task. Implement one remaining task at a time.
 | 07 | Foundation gaps: sidebar, proxy roles, stageHistory, unique applications, `.env.example` | done |
 | 08 | Public SEO, tagged cache, Suspense, `isRemote`/INR fixes | done |
 | 09 | Parallel + intercepting route job modal | done |
-| 10 | Cloudinary + `POST /api/upload` | pending |
+| 10 | Cloudinary + `POST /api/upload` | done |
 | 11 | Apply Server Action + form with `useActionState` | pending |
 | 12 | Seeker applications list + streamed stage history | pending |
 | 13 | Employer list, multi-step post/edit/publish, `revalidateTag` | pending |

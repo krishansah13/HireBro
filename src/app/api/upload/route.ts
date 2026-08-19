@@ -45,7 +45,7 @@ export async function POST(request : Request) {
         })
     }
 
-    const isPdfMime = file.type === "applicaton/pdf";
+    const isPdfMime = file.type === "application/pdf";
     const isPdfName = file.name.toLowerCase().endsWith(".pdf");
 
     if(!isPdfMime && !isPdfName) {
