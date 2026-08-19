@@ -15,7 +15,7 @@ Update this file after every task. Implement one remaining task at a time.
 | 09 | Parallel + intercepting route job modal | done |
 | 10 | Cloudinary + `POST /api/upload` | done |
 | 11 | Apply Server Action + form with `useActionState` | done |
-| 12 | Seeker applications list + streamed stage history | pending |
+| 12 | Seeker applications list + streamed stage history | done |
 | 13 | Employer list, multi-step post/edit/publish, `revalidateTag` | pending |
 | 14 | Applicant pipeline with valid stage transitions | pending |
 | 15 | `GET /api/jobs` and `GET /api/jobs/[id]` sharing `job-query` | pending |
