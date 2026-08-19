@@ -3,8 +3,10 @@ import { formatInr, formatJobType } from "@/lib/utils/format";
 import { ArrowUpRight, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import ApplyForm from "./ApplyForm";
 
 type JobModalProps = {
+    jobId: string;
     slug: string;
     title: string;
     description: string;
@@ -16,7 +18,7 @@ type JobModalProps = {
     companyName?: string;
 };
 export default function JobModal({
-    slug, title, description, location, type, isRemote, salaryMin, salaryMax, companyName
+    jobId, slug, title, description, location, type, isRemote, salaryMin, salaryMax, companyName
 }: JobModalProps) {
     const router = useRouter();
 
@@ -88,21 +90,16 @@ export default function JobModal({
                         {description}
                     </p>
                 </div>
-            <div className="mt-8 flex flex-col gap-3 border-t border-gray-100 pt-6 sm:flex-row sm:items-center">
-                <button
-                    type="button"
-                    className="rounded-xl bg-[#2e46ba] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-gray-900/10 transition hover:bg-blue-700 hover:cursor-pointer"
-                    >
-                    Apply for this job
-                </button>
+                <div className="mt-8 border-t border-gray-100 pt-6">
+                    <ApplyForm jobId={jobId} slug={slug} compact />
 
-                <a
-                    href={`/jobs/${slug}`}
-                    className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-medium text-[#4338a8] transition hover:bg-[#faf9ff]"
+                    <a
+                        href={`/jobs/${slug}`}
+                        className="mt-3 inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-medium text-[#4338a8] transition hover:bg-[#faf9ff]"
                     >
-                    View full details
-                    <ArrowUpRight size={14} />
-                </a>
+                        View full details
+                        <ArrowUpRight size={14} />
+                    </a>
                 </div>
             </div>
         </div>

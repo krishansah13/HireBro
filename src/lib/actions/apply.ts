@@ -56,7 +56,17 @@ export async function applyToJob(
       };
     }
     const now = new Date();
-
+    const existing = await Application.findOne({
+        jobId,
+        userId: session.user.id,
+      }).select("_id");
+      
+      if (existing) {
+        return {
+          ok: false,
+          error: "You have already applied to this job",
+        };
+      }
     await Application.create({
       jobId,
       userId: session.user.id,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState, startTransition } from "react";
 import { useFormStatus } from "react-dom";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -129,7 +129,9 @@ export default function ApplyForm({
         actionData.set("coverNote", coverNote.trim());
       }
 
-      formAction(actionData);
+      startTransition(() => {
+        formAction(actionData);
+      });
     } catch {
       setClientError("Something went wrong. Please try again.");
     } finally {
