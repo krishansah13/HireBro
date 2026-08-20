@@ -4,7 +4,7 @@ Hirelane is a two-sided job board and applicant tracking platform.
 
 The **public** side is a fast, crawlable job board: search, filter, share URLs, and open jobs in a soft-nav modal or as a full detail page. The **private** side is an authenticated ATS for seekers (apply and track stages) and employers (post roles and move applicants through a pipeline).
 
-This repo is a Next.js capstone build. Public board foundations through the intercepting job modal are in place; apply flow, employer tooling, public API, and email are next.
+This repo is a Next.js capstone build. The public board, apply flow, employer tooling, and public jobs API are in place; stage-change email and production deploy are next.
 
 ## Tech stack
 
@@ -15,7 +15,7 @@ This repo is a Next.js capstone build. Public board foundations through the inte
 | Database | MongoDB + Mongoose |
 | Auth | Auth.js (NextAuth v5) Credentials + JWT roles |
 | Validation | Zod |
-| Uploads (planned) | Cloudinary (resume PDFs, server-only keys) |
+| Uploads | Cloudinary (resume PDFs, server-only keys) |
 | Email (planned) | Resend (stage-change notifications) |
 
 ## Features
@@ -29,15 +29,15 @@ This repo is a Next.js capstone build. Public board foundations through the inte
 - `/jobs/[slug]` detail with ISR, metadata, sitemap, and robots
 - Soft-nav job modal via parallel + intercepting routes (`@modal/(.)jobs/[slug]`)
 - Tagged cache reads (`jobs`, `job:{slug}`) for list and detail
-- Seed script with demo companies, jobs, and users
-
-### Coming next
-
 - Resume upload (`POST /api/upload`) and apply Server Action
 - Seeker applications dashboard + streamed stage history
 - Employer job post/edit/publish with `revalidateTag`
 - Applicant pipeline with valid stage transitions
-- Public `GET /api/jobs` and `GET /api/jobs/[id]`
+- Public `GET /api/jobs` and `GET /api/jobs/[id]` (shared `job-query.ts`)
+- Seed script with demo companies, jobs, and users
+
+### Coming next
+
 - Resend email on stage change
 - Production deploy + smoke tests
 
@@ -127,6 +127,8 @@ src/
     (public)/          # Landing, /jobs, /jobs/[slug], intercepting @modal
     (dashboard)/       # Seeker /dashboard and employer /employer
     api/auth/          # Auth.js route handlers
+    api/jobs/          # Public GET /api/jobs and /api/jobs/[id]
+    api/upload/        # Seeker resume PDF upload
     login/             # Credentials login
     sitemap.ts
     robots.ts
@@ -168,6 +170,35 @@ plan/
 | `page` | Positive integer (default `1`) |
 
 Copied URLs reproduce the same results.
+
+## Public jobs API
+
+Same filter contract as `/jobs`. The page and these handlers both call `getJobs` / `getJobById` in `src/lib/job-query.ts`.
+
+### `GET /api/jobs`
+
+| Param | Values |
+| --- | --- |
+| `q` | Free text (title, description, location, company) |
+| `location` | Substring match |
+| `type` | `full-time` \| `part-time` \| `contract` \| `internship` |
+| `remote` | `true` \| `false` \| `any` |
+| `sort` | `newest` \| `oldest` |
+| `page` | Positive integer (default `1`) |
+| `limit` | 1–50 (default `10`) |
+
+**200** — `{ jobs, total, page, limit, totalPages }`  
+**400** — invalid query (bad `type`, `sort`, `page`, `limit`, …)
+
+Example: `/api/jobs?q=engineer&remote=true&sort=newest&page=1`
+
+### `GET /api/jobs/[id]`
+
+**200** — one published job (company populated)  
+**400** — `id` is not a 24-char hex ObjectId  
+**404** — missing, draft, or expired
+
+Responses send `Cache-Control: no-store`. Published list/detail data still uses the tagged server cache inside `job-query.ts`.
 
 ## Data model (summary)
 
