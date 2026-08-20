@@ -3,6 +3,7 @@ import Job from "./models/Job";
 import Company from "./models/Company";
 import { connectToDatabase } from "./utils/db";
 import { serialize } from "./utils/serialize";
+import { JobQueryInput } from "./validation";
 
 export type JobQuery = {
   q?: string;
@@ -13,6 +14,18 @@ export type JobQuery = {
   page?: number;
   limit?: number;
 };
+
+export function toJobQuery(input: JobQueryInput , limit = 10): JobQuery {
+  return {
+    q : input.q,
+    location : input.location,
+    type : input.type,
+    remote : input.remote === "true" ? true : (input.remote==="false" ? false :  undefined) ,
+    sort: input.sort,
+    page: input.page,
+    limit: input.limit ?? limit
+  }
+}
 
 const COMPANY_SELECT = "name logoURL slug website about";
 
