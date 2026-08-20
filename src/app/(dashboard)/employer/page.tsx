@@ -39,6 +39,7 @@ export default async function EmployerPage() {
         >
           Post a job
         </Link>
+
       </div>
 
       {jobs.length === 0 ? (
@@ -85,6 +86,12 @@ export default async function EmployerPage() {
                   className="rounded-lg bg-[#eef0ff] px-3 py-2 text-sm font-medium text-[#2e46ba] transition hover:bg-indigo-100"
                 >
                   Edit
+                </Link>
+                <Link
+                  href={`/employer/jobs/${job._id}/applicants`}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
+                >
+                  Applicants
                 </Link>
                 {job.status === "published" && job.slug ? (
                   <Link
