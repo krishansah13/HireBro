@@ -22,19 +22,19 @@ No administrator role in the mandatory build.
 
 ## Functional requirements
 
-| ID | Requirement | Where it is built |
-| --- | --- | --- |
-| FR-001 | Authentication and roles | Auth.js credentials, JWT role, `src/proxy.ts` |
-| FR-002 | Search and filtering | `/jobs`, URL search params only |
-| FR-003 | Job detail and discoverability | `/jobs/[slug]`, `generateStaticParams`, `generateMetadata`, sitemap |
-| FR-004 | Quick view from the list | Parallel + intercepting route `@modal/(.)jobs/[slug]` |
-| FR-005 | Apply with a resume | Server Action + `POST /api/upload` |
-| FR-006 | Application tracking | `/dashboard`, `/dashboard/applications/[id]` |
-| FR-007 | Post a job (multi-step) | `/employer/jobs/new` |
-| FR-008 | Applicant pipeline | `/employer/jobs/[id]/applicants` |
-| FR-009 | Board correct after a write | Tagged reads + `revalidateTag` on publish/edit |
-| FR-010 | Public jobs API | `GET /api/jobs`, `GET /api/jobs/[id]`, shared `job-query` |
-| FR-011 | Email notifications | Resend on stage change |
+| ID | Requirement | Where it is built | Status |
+| --- | --- | --- | --- |
+| FR-001 | Authentication and roles | Auth.js credentials, JWT role, `src/proxy.ts` | done |
+| FR-002 | Search and filtering | `/jobs`, URL search params only | done |
+| FR-003 | Job detail and discoverability | `/jobs/[slug]`, `generateStaticParams`, `generateMetadata`, sitemap | done |
+| FR-004 | Quick view from the list | Parallel + intercepting route `@modal/(.)jobs/[slug]` | done |
+| FR-005 | Apply with a resume | Server Action + `POST /api/upload` | done |
+| FR-006 | Application tracking | `/dashboard`, `/dashboard/applications/[id]` | done |
+| FR-007 | Post a job (multi-step) | `/employer`, `/employer/jobs/new`, `/employer/jobs/[id]/edit` | done |
+| FR-008 | Applicant pipeline | `/employer/jobs/[id]/applicants` | pending |
+| FR-009 | Board correct after a write | Tagged reads + `revalidateTag` on publish/edit | done |
+| FR-010 | Public jobs API | `GET /api/jobs`, `GET /api/jobs/[id]`, shared `job-query` | pending |
+| FR-011 | Email notifications | Resend on stage change | pending |
 
 ## Tech stack
 
