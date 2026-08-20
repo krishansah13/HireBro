@@ -1,6 +1,6 @@
 "use client"
 
-import { createJob, JobActionState, publishJob, updateJob } from "@/lib/actions/jobs";
+import { createJob, JobActionState, updateJob } from "@/lib/actions/jobs";
 import { JOB_FIELD_STEP, jobStepSchemas } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { useActionState, useCallback, useEffect, useState } from "react";
@@ -31,10 +31,20 @@ const initialState: JobActionState = {
 
 type FieldErrors = Record<string, string>;
 
-function SubmitButton({ label }: { label: string }) {
+function SubmitButton({
+    label,
+    name,
+    value,
+    disabled,
+}: {
+    label: string;
+    name?: string;
+    value?: string;
+    disabled?: boolean;
+}) {
     const { pending } = useFormStatus();
     return (
-        <button type="submit" disabled={pending}
+        <button type="submit" name={name} value={value} disabled={pending || disabled}
             className="rounded-xl bg-[#2e46ba] px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-70"
         >
             {pending ? "Saving..." : label}
@@ -75,7 +85,6 @@ export default function JobWriteForm({
     const router = useRouter();
     const action = mode === "create" ? createJob : updateJob;
     const [state, formAction] = useActionState(action, initialState);
-    const [publishState, publishAction] = useActionState(publishJob, initialState);
     const [step, setStep] = useState(0);
 
     const [title, setTitle] = useState(initial?.title || "");
@@ -91,10 +100,6 @@ export default function JobWriteForm({
     useEffect(() => {
         if (state.ok) router.push("/employer");
     }, [state.ok, router]);
-
-    useEffect(() => {
-        if (publishState.ok) router.push("/employer");
-    }, [publishState.ok, router]);
 
     const values: Record<string, string> = {
         title,
@@ -185,13 +190,12 @@ export default function JobWriteForm({
                     );
                 })}
             </ol>
-            {(serverError || state.error || publishState.error || stepHasErrors) && (
+            {(serverError || state.error || stepHasErrors) && (
                 <div className="flex flex-wrap items-center gap-3 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700">
                     <span>
                         {serverError
                             ? `Step ${serverError.step + 1}. ${STEPS[serverError.step]} — ${serverError.message}`
                             : state.error ||
-                            publishState.error ||
                             `Fix the highlighted field${Object.keys(errors).length > 1 ? "s" : ""} in step ${step + 1}. ${STEPS[step]}`}
                     </span>
                     {serverError && serverError.step !== step && (
@@ -384,38 +388,25 @@ export default function JobWriteForm({
                     )}
                     {step === 3 && (
                         <>
-                            <input type="hidden" name="publish" value="false" />
-                            <SubmitButton label={mode === "create" ? "Save draft" : "Save changes"} />
+                            <SubmitButton
+                                name="publish"
+                                value="false"
+                                label={mode === "create" ? "Save draft" : "Save changes"}
+                            />
+                            <SubmitButton
+                                name="publish"
+                                value="true"
+                                disabled={initial?.status === "published"}
+                                label={
+                                    initial?.status === "published"
+                                        ? "Already published"
+                                        : "Publish role"
+                                }
+                            />
                         </>
                     )}
                 </div>
             </form>
-            {step === 3 && (
-                <form
-                    action={mode === "create" ? formAction : publishAction}
-                    onSubmit={mode === "create" ? handleReviewSubmit : undefined}
-                >
-                    {jobId ? <input type="hidden" name="jobId" value={jobId} /> : null}
-                    {mode === "create" && (
-                        <>
-                            <input type="hidden" name="title" value={title} />
-                            <input type="hidden" name="description" value={description} />
-                            <input type="hidden" name="location" value={location} />
-                            <input type="hidden" name="type" value={type} />
-                            <input type="hidden" name="isRemote" value={isRemote} />
-                            <input type="hidden" name="salaryMin" value={salaryMin} />
-                            <input type="hidden" name="salaryMax" value={salaryMax} />
-                            <input type="hidden" name="expiresAt" value={expiresAt} />
-                            <input type="hidden" name="publish" value="true" />
-                        </>
-                    )}
-                    <SubmitButton
-                        label={
-                            initial?.status === "published" ? "Already published" : "Publish role"
-                        }
-                    />
-                </form>
-            )}
         </div>
     );
 }
