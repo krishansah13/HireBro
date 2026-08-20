@@ -13,6 +13,13 @@ export type JobActionState = {
     jobId?:string;
 };
 
+function firstIssueMessage(error: { issues: { path: PropertyKey[]; message: string }[] }) {
+    const issue = error.issues[0];
+    if (!issue) return "Invalid form data";
+    const field = issue.path.map(String).join(".");
+    return field ? `${field}: ${issue.message}` : issue.message;
+}
+
 function formfields(formData: FormData) {
     return {
         title : formData.get("title"),
@@ -22,7 +29,7 @@ function formfields(formData: FormData) {
         isRemote:formData.get("isRemote"),
         salaryMin:formData.get("salaryMin"),
         salaryMax:formData.get("salaryMax"),
-        expiredAt:formData.get("expiredAt"),
+        expiresAt:formData.get("expiresAt"),
         publish:formData.get("publish") || "false",
     }
 }
@@ -57,7 +64,7 @@ export async function createJob(_prev:JobActionState, formData: FormData): Promi
     if(!parsed.success) {
         return {
             ok : false,
-            error : parsed.error.issues[0]?.message || "Invalid form data",
+            error : firstIssueMessage(parsed.error),
         }
     }
     const data = parsed.data;
@@ -69,7 +76,7 @@ export async function createJob(_prev:JobActionState, formData: FormData): Promi
 
         const job = await Job.create({
             companyId : session.companyId,
-            postedBy : session.userId,
+            postedById : session.userId,
             title : data.title,
             slug : slugifyJobTitle(data.title),
             description : data.description,
@@ -119,7 +126,7 @@ export async function updateJob(_prev:JobActionState, formData: FormData): Promi
     if(!parsed.success){
         return {
             ok : false,
-            error : parsed.error.issues[0]?.message || "Invalid form data",
+            error : firstIssueMessage(parsed.error),
         }
     }
     const data = parsed.data;
