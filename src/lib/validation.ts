@@ -20,22 +20,70 @@ export const applySchema = z.object({
   coverNote: z.string().max(2000).optional(),
 });
 
-export const jobWriteSchema = z
-  .object({
-    title: z.string().trim().min(3).max(120),
-    description: z.string().trim().min(20).max(8000),
-    location: z.string().trim().min(2).max(120),
-    type: z.enum(["part-time", "contract", "full-time", "internship"]),
-    isRemote: z.enum(["true", "false"]),
-    salaryMin: z.coerce.number().int().positive(),
-    salaryMax: z.coerce.number().int().positive(),
-    expiresAt: z.string().min(1),
-    publish: z.enum(["true", "false"]).optional(),
-  })
-  .refine((data) => data.salaryMax >= data.salaryMin, {
-    message: "Maximum salary must be at least the minimum salary",
-    path: ["salaryMax"],
-  });
+const salaryRule = {
+  message: "Maximum salary must be at least the minimum salary",
+  path: ["salaryMax"],
+};
+
+const jobWriteFields = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(3, "Title must be at least 3 characters")
+    .max(120, "Title must be 120 characters or fewer"),
+  description: z
+    .string()
+    .trim()
+    .min(20, "Description must be at least 20 characters")
+    .max(8000, "Description must be 8000 characters or fewer"),
+  location: z
+    .string()
+    .trim()
+    .min(2, "Location must be at least 2 characters")
+    .max(120, "Location must be 120 characters or fewer"),
+  type: z.enum(["part-time", "contract", "full-time", "internship"], {
+    message: "Choose a job type",
+  }),
+  isRemote: z.enum(["true", "false"], { message: "Choose a work mode" }),
+  salaryMin: z.coerce
+    .number({ message: "Minimum salary must be a number" })
+    .int("Minimum salary must be a whole number")
+    .positive("Minimum salary must be greater than 0"),
+  salaryMax: z.coerce
+    .number({ message: "Maximum salary must be a number" })
+    .int("Maximum salary must be a whole number")
+    .positive("Maximum salary must be greater than 0"),
+  expiresAt: z.string().min(1, "Choose an expiry date"),
+  publish: z.enum(["true", "false"]).optional(),
+});
+
+export const jobWriteSchema = jobWriteFields.refine(
+  (data) => data.salaryMax >= data.salaryMin,
+  salaryRule,
+);
+
+/**
+ * One schema per wizard step so the client can block Continue using the exact
+ * rules the Server Action re-checks.
+ */
+export const jobStepSchemas = [
+  jobWriteFields.pick({ title: true, description: true }),
+  jobWriteFields.pick({ location: true, type: true, isRemote: true }),
+  jobWriteFields
+    .pick({ salaryMin: true, salaryMax: true, expiresAt: true })
+    .refine((data) => data.salaryMax >= data.salaryMin, salaryRule),
+] as const;
+
+export const JOB_FIELD_STEP: Record<string, number> = {
+  title: 0,
+  description: 0,
+  location: 1,
+  type: 1,
+  isRemote: 1,
+  salaryMin: 2,
+  salaryMax: 2,
+  expiresAt: 2,
+};
 
 export const jobIdSchema = z.object({
   jobId: objectIdSchema,
