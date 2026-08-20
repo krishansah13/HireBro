@@ -33,7 +33,7 @@ No administrator role in the mandatory build.
 | FR-007 | Post a job (multi-step) | `/employer`, `/employer/jobs/new`, `/employer/jobs/[id]/edit` | done |
 | FR-008 | Applicant pipeline | `/employer/jobs/[id]/applicants` | done |
 | FR-009 | Board correct after a write | Tagged reads + `revalidateTag` on publish/edit | done |
-| FR-010 | Public jobs API | `GET /api/jobs`, `GET /api/jobs/[id]`, shared `job-query` | pending |
+| FR-010 | Public jobs API | `GET /api/jobs`, `GET /api/jobs/[id]`, shared `job-query` | done |
 | FR-011 | Email notifications | Resend on stage change | pending |
 
 ## Tech stack
