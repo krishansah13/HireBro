@@ -7,6 +7,8 @@ import Application from "../models/Application";
 import Job from "../models/Job";
 import { canTransition } from "../stage-transitions";
 import { revalidatePath } from "next/cache";
+import { sendStageChangeEmail } from "../email";
+import User from "../models/User";
 
 export type PipelineActionState={
     ok: boolean;
@@ -50,7 +52,7 @@ export async function updateApplicationStage(_prev: PipelineActionState, formDat
         const job = await Job.findOne({
             _id : application.jobId,
             companyId : session.user.companyId
-        }).select("_id");
+        }).select("_id title");
 
         if(!job) return {
             ok: false,
@@ -73,6 +75,15 @@ export async function updateApplicationStage(_prev: PipelineActionState, formDat
         });
         await application.save();
         revalidatePath(`/employer/jobs/${job._id}/applicants`);
+        const seeker = await User.findById(application.userId).select("name email");
+        if(seeker?.email) {
+            await sendStageChangeEmail({
+                to : seeker.email, 
+                applicantName : seeker.name??"",
+                jobTitle : job.title,
+                stage:parsed.data.stage,
+            });
+        }
         return {ok:true}
     } catch(error){
         console.error("Update Stage Failed :", error)
