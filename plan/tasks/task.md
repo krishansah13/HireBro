@@ -21,6 +21,6 @@ Update this file after every task. Implement one remaining task at a time.
 | 15 | `GET /api/jobs` and `GET /api/jobs/[id]` sharing `job-query` | done |
 | 16 | Nodemailer email on stage change | done |
 | 17 | Authorization + rendering-strategy audit | done |
-| 18 | Production deploy + smoke tests | pending |
+| 18 | Production deploy + smoke tests | done |
 
 Legend: `done` · `pending` · `in progress`

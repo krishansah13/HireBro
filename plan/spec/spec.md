@@ -196,6 +196,10 @@ Bonus: choose any two after all mandatory tasks pass.
 - Seeker: `seeker1@example.com` / `Seeker@123`
 - Employer: `rahul@technova.com` / `Employer@123`
 
+## Production
+
+Deployed at [https://hirelane-flax.vercel.app/](https://hirelane-flax.vercel.app/). Hosted MongoDB, Auth.js, Cloudinary, and SMTP env vars are server-only on Vercel. See [`plan/tasks/task18/task.md`](../tasks/task18/task.md).
+
 ## Rendering and authz audit log
 
 Completed. Full walk: [`plan/tasks/task17/task.md`](../tasks/task17/task.md).

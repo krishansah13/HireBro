@@ -4,7 +4,7 @@ Hirelane is a two-sided job board and applicant tracking platform.
 
 The **public** side is a fast, crawlable job board: search, filter, share URLs, and open jobs in a soft-nav modal or as a full detail page. The **private** side is an authenticated ATS for seekers (apply and track stages) and employers (post roles and move applicants through a pipeline).
 
-This repo is a Next.js capstone build. The public board, apply flow, employer tooling, public jobs API, and stage-change email are in place; the authz/rendering audit and production deploy are next.
+This repo is a Next.js capstone build. Mandatory features through deploy are in place. Live: [https://hirelane-flax.vercel.app/](https://hirelane-flax.vercel.app/).
 
 ## Tech stack
 
@@ -36,13 +36,9 @@ This repo is a Next.js capstone build. The public board, apply flow, employer to
 - Public `GET /api/jobs` and `GET /api/jobs/[id]` (shared `job-query.ts`)
 - Nodemailer stage-change email (`SMTP_*`, from the pipeline Server Action)
 - Seed script with demo companies, jobs, and users
+- Production deploy on Vercel ([hirelane-flax.vercel.app](https://hirelane-flax.vercel.app/))
 
-### Coming next
-
-- Authorization + rendering-strategy audit
-- Production deploy + smoke tests
-
-Full product rules live in [`plan/spec/spec.md`](plan/spec/spec.md). Task progress is tracked in [`plan/tasks/task.md`](plan/tasks/task.md).
+Full product rules live in [`plan/spec/spec.md`](plan/spec/spec.md). Task progress is tracked in [`plan/tasks/task.md`](plan/tasks/task.md). Bonus items in the spec are optional after the mandatory build.
 
 ## Roles
 
@@ -103,6 +99,19 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+### Production
+
+Live app: [https://hirelane-flax.vercel.app/](https://hirelane-flax.vercel.app/).
+
+On the host, set the same secrets as `.env.example`, and point Auth.js at the public origin:
+
+```env
+AUTH_URL=https://hirelane-flax.vercel.app
+NEXT_PUBLIC_APP_URL=https://hirelane-flax.vercel.app
+```
+
+Do not put Cloudinary or SMTP keys in `NEXT_PUBLIC_*` variables.
 
 ### Scripts
 
