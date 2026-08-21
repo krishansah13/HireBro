@@ -256,7 +256,7 @@ async function seed(): Promise<void> {
     /* ------------------------------ */
 
     console.log("Creating companies...");
-
+    await Application.syncIndexes();
     const companies = await Company.insertMany(companiesData);
 
     /*
@@ -465,47 +465,72 @@ Requirements:
     const publishedJobs = jobs.filter((job) => job.status === "published");
 
     const applicationDocuments = [];
+    const usedPairs = new Set<string>();
 
-    for (let i = 0; i < 45; i++) {
+    function historyFor(
+      stage: ApplicationStage,
+      appliedAt: Date,
+      stageChangedAt: Date,
+    ) {
+      if (stage === "applied") {
+        return [{ stage: "applied" as const, changedAt: appliedAt }];
+      }
+
+      if (stage === "rejected") {
+        return [
+          { stage: "applied" as const, changedAt: appliedAt },
+          { stage: "rejected" as const, changedAt: stageChangedAt },
+        ];
+      }
+
+      const path: ApplicationStage[] = ["applied", "screening", "interview", "offer"];
+      const end = path.indexOf(stage);
+      const steps = path.slice(0, end + 1);
+      const span = Math.max(stageChangedAt.getTime() - appliedAt.getTime(), 1);
+
+      return steps.map((step, index) => ({
+        stage: step,
+        changedAt:
+          index === 0
+            ? appliedAt
+            : new Date(
+                appliedAt.getTime() +
+                  (span * index) / Math.max(steps.length - 1, 1),
+              ),
+      }));
+    }
+
+    let attempts = 0;
+    while (applicationDocuments.length < 45 && attempts < 400) {
+      attempts += 1;
       const seeker = randomItem(seekers);
-
       const job = randomItem(publishedJobs);
+      const pairKey = `${job._id.toString()}:${seeker._id.toString()}`;
+
+      if (usedPairs.has(pairKey)) {
+        continue;
+      }
+
+      usedPairs.add(pairKey);
 
       const stage = randomItem(stages);
-
       const appliedAt = new Date(
         Date.now() - randomNumber(1, 60) * 24 * 60 * 60 * 1000,
       );
-
       const stageChangedAt = new Date(
         appliedAt.getTime() + randomNumber(0, 10) * 24 * 60 * 60 * 1000,
       );
 
       applicationDocuments.push({
-        /*
-         * Reference to Job
-         */
         jobId: job._id,
-
-        /*
-         * Reference to Seeker
-         */
         userId: seeker._id,
-
-        /*
-         * Matches your schema:
-         * resumeURL, not resumeUrl
-         */
         resumeURL: "https://example.com/resumes/sample-resume.pdf",
-
         coverNote:
           "I am excited to apply for this position and believe my skills and experience make me a strong candidate.",
-
         stage,
-
         appliedAt,
-
         stageChangedAt,
+        stageHistory: historyFor(stage, appliedAt, stageChangedAt),
       });
     }
 

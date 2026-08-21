@@ -1,6 +1,31 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getJobBySlug } from "@/lib/job-query";
+import { getJobBySlug, getPublishedJobSlugs } from "@/lib/job-query";
 import { ArrowUpRight } from "lucide-react";
+import { formatInr } from "@/lib/utils/format";
+import ApplyForm from "@/components/ApplyForm";
+
+export const revalidate = 3600; // 1 hour
+
+export async function generateStaticParams() {
+    const jobs = await getPublishedJobSlugs();;
+    return jobs.map((job: { slug: string }) => ({ slug: job.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }>; }): Promise<Metadata> {
+    const { slug } = await params;
+    const job = await getJobBySlug(slug);
+    if (!job) {
+        return { title: "Job Not Found" }
+    }
+    const company = job.companyId && typeof job.companyId === "object" ? job.companyId : null;
+
+    const description: string = typeof job.description === "string" ? job.description.slice(0, 160) : "View this role on Hirelane"
+
+    return {
+        title: company?.name ? `${job.title} at ${company.name}` : job.title, description
+    };
+}
 
 export default async function JobDetail({
     params,
@@ -13,6 +38,7 @@ export default async function JobDetail({
     if (!job) {
         notFound();
     }
+    const jobId = String(job._id);
 
     const company =
         job.companyId && typeof job.companyId === "object"
@@ -72,18 +98,14 @@ export default async function JobDetail({
 
                                     <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
                                         <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                                        {job.remote ? "Remote" : "On-site"}
+                                        {job.isRemote ? "Remote" : "On-site"}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Apply button - desktop */}
-                            <div className="hidden sm:block">
-                                <button className="rounded-xl bg-[#2e46ba] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/10 transition hover:bg-blue-700 hover:cursor-pointer">
-                                    <p className="flex items-center gap-2">
-                                        Apply for this job <ArrowUpRight size={16} />
-                                    </p>
-                                </button>
+                            <div className="hidden w-full max-w-sm sm:block">
+                                <ApplyForm jobId={jobId} slug={slug} compact />
                             </div>
                         </div>
                     </div>
@@ -136,7 +158,7 @@ export default async function JobDetail({
                                         Work arrangement
                                     </dt>
                                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                                        {job.remote ? "Remote" : "On-site"}
+                                        {job.isRemote ? "Remote" : "On-site"}
                                     </dd>
                                 </div>
 
@@ -153,10 +175,7 @@ export default async function JobDetail({
                                         Minimum Salary
                                     </dt>
                                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                                        {job.salaryMin?.toLocaleString("en-US", {
-                                            style: "currency",
-                                            currency: "USD",
-                                        })}
+                                        {formatInr(job.salaryMin)}
                                         <span className="ml-1 text-xs text-gray-500">
                                             per year
                                         </span>
@@ -167,10 +186,7 @@ export default async function JobDetail({
                                         Maximum Salary
                                     </dt>
                                     <dd className="mt-1 text-sm font-semibold text-gray-900">
-                                        {job.salaryMax?.toLocaleString("en-US", {
-                                            style: "currency",
-                                            currency: "USD",
-                                        })}
+                                        {formatInr(job.salaryMax)}
                                         <span className="ml-1 text-xs text-gray-500">
                                             per year
                                         </span>
@@ -183,10 +199,8 @@ export default async function JobDetail({
                 </section>
 
                 {/* Mobile CTA */}
-                <div className="sticky bottom-0 -t bg-white/95 p-4 backdrop-blur sm:hidden">
-                    <button className="w-full rounded-xl bg-[#2E46BA] px-5 py-3.5 text-sm font-semibold text-white shadow-lg hover:bg-blue-700 hover:cursor-pointer">
-                        Apply for this job
-                    </button>
+                <div className="sticky bottom-0 bg-white/95 p-4 backdrop-blur sm:hidden">
+                    <ApplyForm jobId={jobId} slug={slug} compact />
                 </div>
             </div>
         </main>

@@ -1,6 +1,9 @@
+import { unstable_cache } from "next/cache";
 import Job from "./models/Job";
 import Company from "./models/Company";
 import { connectToDatabase } from "./utils/db";
+import { serialize } from "./utils/serialize";
+import { JobQueryInput } from "./validation";
 
 export type JobQuery = {
   q?: string;
@@ -12,7 +15,21 @@ export type JobQuery = {
   limit?: number;
 };
 
-export async function getJobs(query: JobQuery) {
+export function toJobQuery(input: JobQueryInput , limit = 10): JobQuery {
+  return {
+    q : input.q,
+    location : input.location,
+    type : input.type,
+    remote : input.remote === "true" ? true : (input.remote==="false" ? false :  undefined) ,
+    sort: input.sort,
+    page: input.page,
+    limit: input.limit ?? limit
+  }
+}
+
+const COMPANY_SELECT = "name logoURL slug website about";
+
+async function queryJobs(query: JobQuery) {
   await connectToDatabase();
 
   const { q, location, type, remote, sort = "newest", page, limit } = query;
@@ -20,6 +37,7 @@ export async function getJobs(query: JobQuery) {
   const filter: Record<string, unknown> = {
     status: "published",
   };
+
   if (q) {
     const matchingCompanies = await Company.find({
       name: {
@@ -31,31 +49,13 @@ export async function getJobs(query: JobQuery) {
     const companyIds = matchingCompanies.map((company) => company._id);
 
     filter.$or = [
-      {
-        title: {
-          $regex: q,
-          $options: "i",
-        },
-      },
-      {
-        description: {
-          $regex: q,
-          $options: "i",
-        },
-      },
-      {
-        location: {
-          $regex: q,
-          $options: "i",
-        },
-      },
-      {
-        companyId: {
-          $in: companyIds,
-        },
-      },
+      { title: { $regex: q, $options: "i" } },
+      { description: { $regex: q, $options: "i" } },
+      { location: { $regex: q, $options: "i" } },
+      { companyId: { $in: companyIds } },
     ];
   }
+
   if (location) {
     filter.location = {
       $regex: location,
@@ -70,6 +70,7 @@ export async function getJobs(query: JobQuery) {
   if (remote !== undefined) {
     filter.isRemote = remote;
   }
+
   const sortOption: Record<string, 1 | -1> =
     sort === "oldest" ? { publishedAt: 1 } : { publishedAt: -1 };
   const currentPage = page ?? 1;
@@ -78,7 +79,7 @@ export async function getJobs(query: JobQuery) {
 
   const [jobs, total] = await Promise.all([
     Job.find(filter)
-      .populate("companyId", "name logoURL slug")
+      .populate("companyId", COMPANY_SELECT)
       .sort(sortOption)
       .skip(skip)
       .limit(pageLimit)
@@ -86,36 +87,86 @@ export async function getJobs(query: JobQuery) {
     Job.countDocuments(filter),
   ]);
 
-  return {
+  return serialize({
     jobs,
     total,
     page: currentPage,
     limit: pageLimit,
     totalPages: Math.ceil(total / pageLimit),
-  };
+  });
 }
 
-export async function getJobBySlug(slug: string) {
+export async function getJobs(query: JobQuery) {
+  const cacheKey = JSON.stringify({
+    q: query.q ?? "",
+    location: query.location ?? "",
+    type: query.type ?? "",
+    remote: query.remote ?? "any",
+    sort: query.sort ?? "newest",
+    page: query.page ?? 1,
+    limit: query.limit ?? 10,
+  });
+
+  return unstable_cache(async () => queryJobs(query), ["getJobs", cacheKey], {
+    tags: ["jobs"],
+  })();
+}
+
+async function queryJobBySlug(slug: string) {
   await connectToDatabase();
 
   const job = await Job.findOne({
     slug,
     status: "published",
   })
-    .populate("companyId", "name logoURL slug")
+    .populate("companyId", COMPANY_SELECT)
     .lean();
 
-  return job;
+  return serialize(job);
 }
 
-export async function getLandingContent() {
+export async function getJobBySlug(slug: string) {
+  return unstable_cache(async () => queryJobBySlug(slug), ["job-slug", slug], {
+    tags: ["jobs", `job:${slug}`],
+  })();
+}
+
+async function queryJobById(id: string) {
   await connectToDatabase();
 
+  const job = await Job.findOne({
+    _id: id,
+    status: "published",
+  })
+    .populate("companyId", COMPANY_SELECT)
+    .lean();
+
+  return serialize(job);
+}
+
+export async function getJobById(id: string) {
+  return unstable_cache(async () => queryJobById(id), ["job-id", id], {
+    tags: ["jobs"],
+  })();
+}
+
+async function queryLandingContent() {
   const [featured, companyCount, companies, remoteRoles] = await Promise.all([
-    getJobs({ sort: "newest", limit: 6 }),
-    Company.countDocuments(),
-    Company.find({}).select("name logoURL slug").limit(6).lean(),
-    Job.countDocuments({ status: "published", isRemote: true }),
+    queryJobs({ sort: "newest", limit: 6 }),
+    (async () => {
+      await connectToDatabase();
+      return Company.countDocuments();
+    })(),
+    (async () => {
+      await connectToDatabase();
+      return serialize(
+        await Company.find({}).select("name logoURL slug").limit(6).lean(),
+      );
+    })(),
+    (async () => {
+      await connectToDatabase();
+      return Job.countDocuments({ status: "published", isRemote: true });
+    })(),
   ]);
 
   return {
@@ -127,4 +178,22 @@ export async function getLandingContent() {
     },
     companies,
   };
+}
+
+export async function getLandingContent() {
+  return unstable_cache(queryLandingContent, ["landing-content"], {
+    tags: ["jobs"],
+  })();
+}
+
+export async function getPublishedJobSlugs() {
+  return unstable_cache(
+    async () => {
+      await connectToDatabase();
+      const jobs = await Job.find({ status: "published" }).select("slug updatedAt").lean();
+      return serialize(jobs);
+    },
+    ["published-job-slugs"],
+    { tags: ["jobs"] },
+  )();
 }
