@@ -4,7 +4,7 @@ Hirelane is a two-sided job board and applicant tracking platform.
 
 The **public** side is a fast, crawlable job board: search, filter, share URLs, and open jobs in a soft-nav modal or as a full detail page. The **private** side is an authenticated ATS for seekers (apply and track stages) and employers (post roles and move applicants through a pipeline).
 
-This repo is a Next.js capstone build. The public board, apply flow, employer tooling, and public jobs API are in place; stage-change email and production deploy are next.
+This repo is a Next.js capstone build. The public board, apply flow, employer tooling, public jobs API, and stage-change email are in place; the authz/rendering audit and production deploy are next.
 
 ## Tech stack
 
@@ -16,7 +16,7 @@ This repo is a Next.js capstone build. The public board, apply flow, employer to
 | Auth | Auth.js (NextAuth v5) Credentials + JWT roles |
 | Validation | Zod |
 | Uploads | Cloudinary (resume PDFs, server-only keys) |
-| Email (planned) | Resend (stage-change notifications) |
+| Email | Nodemailer (stage-change notifications, `SMTP_*` server-only) |
 
 ## Features
 
@@ -34,11 +34,12 @@ This repo is a Next.js capstone build. The public board, apply flow, employer to
 - Employer job post/edit/publish with `revalidateTag`
 - Applicant pipeline with valid stage transitions
 - Public `GET /api/jobs` and `GET /api/jobs/[id]` (shared `job-query.ts`)
+- Nodemailer stage-change email (`SMTP_*`, from the pipeline Server Action)
 - Seed script with demo companies, jobs, and users
 
 ### Coming next
 
-- Resend email on stage change
+- Authorization + rendering-strategy audit
 - Production deploy + smoke tests
 
 Full product rules live in [`plan/spec/spec.md`](plan/spec/spec.md). Task progress is tracked in [`plan/tasks/task.md`](plan/tasks/task.md).
@@ -80,8 +81,11 @@ CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 
-RESEND_API_KEY=
-RESEND_FROM=Hirelane <noreply@example.com>
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+SMTP_FROM=Hirelane <you@gmail.com>
 ```
 
 `NEXT_PUBLIC_APP_URL` is optional; sitemap/robots fall back to `http://localhost:3000`.

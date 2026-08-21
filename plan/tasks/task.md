@@ -19,7 +19,7 @@ Update this file after every task. Implement one remaining task at a time.
 | 13 | Employer list, multi-step post/edit/publish, `revalidateTag` | done |
 | 14 | Applicant pipeline with valid stage transitions | done |
 | 15 | `GET /api/jobs` and `GET /api/jobs/[id]` sharing `job-query` | done |
-| 16 | Resend email on stage change | pending |
+| 16 | Nodemailer email on stage change | done |
 | 17 | Authorization + rendering-strategy audit | pending |
 | 18 | Production deploy + smoke tests | pending |
 

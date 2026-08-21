@@ -34,7 +34,7 @@ No administrator role in the mandatory build.
 | FR-008 | Applicant pipeline | `/employer/jobs/[id]/applicants` | done |
 | FR-009 | Board correct after a write | Tagged reads + `revalidateTag` on publish/edit | done |
 | FR-010 | Public jobs API | `GET /api/jobs`, `GET /api/jobs/[id]`, shared `job-query` | done |
-| FR-011 | Email notifications | Resend on stage change | pending |
+| FR-011 | Email notifications | Nodemailer on stage change | done |
 
 ## Tech stack
 
@@ -42,7 +42,7 @@ No administrator role in the mandatory build.
 - MongoDB + Mongoose
 - Auth.js (NextAuth v5) Credentials provider
 - Cloudinary for resume PDFs (server-only keys)
-- Resend for stage-change email
+- Nodemailer for stage-change email
 - Zod for validation
 
 ## Data model
@@ -155,7 +155,7 @@ Enforced in the query / Server Action / Route Handler, not by hiding UI.
 | `offer` | none (terminal) |
 | `rejected` | none (terminal) |
 
-On a valid change: update `stage`, `stageChangedAt`, append `stageHistory`, send Resend email.
+On a valid change: update `stage`, `stageChangedAt`, append `stageHistory`, send a Nodemailer email.
 
 ## Apply and upload
 
@@ -171,7 +171,7 @@ Env: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
 
 ## Email
 
-Resend sends one email to the applicant when an employer changes their stage. `RESEND_API_KEY` and `RESEND_FROM` are server-only.
+Nodemailer sends one email to the applicant when an employer changes their stage. `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, and `SMTP_FROM` are server-only. A send failure is logged; the stage write still succeeds.
 
 ## Validation
 
@@ -198,4 +198,11 @@ Bonus: choose any two after all mandatory tasks pass.
 
 ## Rendering and authz audit log
 
-Filled in during task 17 after the write paths exist. See that task's notes in `plan/tasks/task17/task.md`.
+Inventory as of task 17 notes (task still pending until 404 review): see [`plan/tasks/task17/task.md`](../tasks/task17/task.md).
+
+- Proxy + layouts gate `/dashboard` and `/employer` by session and role.
+- Seeker reads use `userId` in the query (`getMyApplicationById`, apply, nav title).
+- Employer reads/writes use `companyId` on the Job (`getCompanyJobById`, job actions, pipeline).
+- Foreign application / job ids `notFound()`; they do not return the other party's data.
+- Public API: `GET /api/jobs*` is `force-dynamic` with `Cache-Control: no-store`; data still from tagged `job-query`.
+- Stage-change mail: Nodemailer (`src/lib/email.ts`, `SMTP_*`) from `updateApplicationStage` after save.
