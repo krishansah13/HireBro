@@ -198,7 +198,7 @@ Bonus: choose any two after all mandatory tasks pass.
 
 ## Rendering and authz audit log
 
-Inventory as of task 17 notes (task still pending until 404 review): see [`plan/tasks/task17/task.md`](../tasks/task17/task.md).
+Completed. Full walk: [`plan/tasks/task17/task.md`](../tasks/task17/task.md).
 
 - Proxy + layouts gate `/dashboard` and `/employer` by session and role.
 - Seeker reads use `userId` in the query (`getMyApplicationById`, apply, nav title).

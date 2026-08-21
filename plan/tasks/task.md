@@ -20,7 +20,7 @@ Update this file after every task. Implement one remaining task at a time.
 | 14 | Applicant pipeline with valid stage transitions | done |
 | 15 | `GET /api/jobs` and `GET /api/jobs/[id]` sharing `job-query` | done |
 | 16 | Nodemailer email on stage change | done |
-| 17 | Authorization + rendering-strategy audit | pending |
+| 17 | Authorization + rendering-strategy audit | done |
 | 18 | Production deploy + smoke tests | pending |
 
 Legend: `done` · `pending` · `in progress`
