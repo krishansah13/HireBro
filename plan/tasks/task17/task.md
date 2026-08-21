@@ -1,6 +1,6 @@
 # Task 17 — Authorization + rendering audit
 
-**Status:** pending (inventory current; live 404 / redirect checks still to confirm)
+**Status:** done
 
 ## Scope
 
@@ -80,7 +80,7 @@ Visitors cannot apply; `ApplyForm` sends them to `/login?callbackUrl=...`. Uploa
 | `GET /api/jobs` | Public; Zod 400 |
 | `GET /api/jobs/[id]` | Public; published only |
 
-## Confirm before marking done
+## Confirmed
 
 - Seeker opens `/employer` → `/dashboard`
 - Employer opens `/dashboard` → `/employer`
